@@ -1,0 +1,103 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="225dp"
+    android:viewportWidth="400"
+    android:viewportHeight="225">
+
+    <!-- Sky Gradient -->
+    <path
+        android:fillColor="#FFF3E0"
+        android:pathData="M0,0h400v225h-400z" />
+
+    <!-- Morning Sun Glow -->
+    <path
+        android:fillColor="#FFE082"
+        android:pathData="M160,70m-50,0a50,50 0,1,1 100,0a50,50 0,1,1 -100,0" />
+    <path
+        android:fillColor="#FFF8E1"
+        android:pathData="M160,70m-35,0a35,35 0,1,1 70,0a35,35 0,1,1 -70,0" />
+
+    <!-- Distant Mountain Hills -->
+    <path
+        android:fillColor="#A5D6A7"
+        android:pathData="M0,130 Q70,95 150,120 T300,105 T400,125 L400,225 L0,225 Z" />
+    <path
+        android:fillColor="#81C784"
+        android:pathData="M0,145 Q80,120 180,135 T350,125 T400,140 L400,225 L0,225 Z" />
+
+    <!-- Lush Pasture Ground -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M0,160 Q100,145 220,155 T400,150 L400,225 L0,225 Z" />
+    <path
+        android:fillColor="#388E3C"
+        android:pathData="M0,180 Q120,170 250,175 T400,170 L400,225 L0,225 Z" />
+
+    <!-- Rural Barn / Dairy Shed -->
+    <path
+        android:fillColor="#8D6E63"
+        android:pathData="M290,130 L350,130 L350,170 L290,170 Z" />
+    <!-- Barn Roof -->
+    <path
+        android:fillColor="#D32F2F"
+        android:pathData="M280,130 L320,100 L360,130 Z" />
+    <!-- Barn Door -->
+    <path
+        android:fillColor="#4E342E"
+        android:pathData="M310,145 L330,145 L330,170 L310,170 Z" />
+
+    <!-- Trees -->
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M45,130 L55,130 L55,175 L45,175 Z" />
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M50,110m-25,0a25,25 0,1,1 50,0a25,25 0,1,1 -50,0" />
+    <path
+        android:fillColor="#388E3C"
+        android:pathData="M50,95m-18,0a18,18 0,1,1 36,0a18,18 0,1,1 -36,0" />
+
+    <!-- Another Tree -->
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M80,140 L88,140 L88,180 L80,180 Z" />
+    <path
+        android:fillColor="#1B5E20"
+        android:pathData="M84,125m-20,0a20,20 0,1,1 40,0a20,20 0,1,1 -40,0" />
+
+    <!-- Wooden Picket Fence -->
+    <path
+        android:fillColor="#BCAAA4"
+        android:pathData="M110,165 L270,165 L270,168 L110,168 Z" />
+    <path
+        android:fillColor="#BCAAA4"
+        android:pathData="M110,173 L270,173 L270,176 L110,176 Z" />
+    <path
+        android:fillColor="#8D6E63"
+        android:pathData="M130,160 L134,160 L134,185 L130,185 Z M160,160 L164,160 L164,185 L160,185 Z M190,160 L194,160 L194,185 L190,185 Z M220,160 L224,160 L224,185 L220,185 Z M250,160 L254,160 L254,185 L250,185 Z" />
+
+    <!-- Grazing Cow in Pasture -->
+    <!-- Cow Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M165,165 Q180,155 205,160 Q215,168 215,182 L165,182 Z" />
+    <!-- Cow Brown Patches -->
+    <path
+        android:fillColor="#A15C38"
+        android:pathData="M175,162 Q185,158 190,168 Q180,174 175,162 Z" />
+    <path
+        android:fillColor="#A15C38"
+        android:pathData="M200,166 Q210,165 212,176 Q204,178 200,166 Z" />
+    <!-- Cow Head -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M152,166 Q156,160 166,165 L164,176 L154,174 Z" />
+    <!-- Cow Ears/Horns -->
+    <path
+        android:fillColor="#A15C38"
+        android:pathData="M155,160 Q152,152 158,154 Z" />
+    <!-- Cow Legs -->
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M168,182 L172,182 L172,198 L168,198 Z M176,182 L180,182 L180,198 L176,198 Z M202,182 L206,182 L206,198 L202,198 Z M210,182 L214,182 L214,198 L210,198 Z" />
+</vector>

@@ -1,0 +1,71 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Circular Background -->
+    <path
+        android:fillColor="#E3F2FD"
+        android:pathData="M100,10m-90,0a90,90 0,1,1 180,0a90,90 0,1,1 -180,0" />
+
+    <!-- Doctor Shoulders and White Coat -->
+    <path
+        android:fillColor="#1565C0"
+        android:pathData="M40,195 Q45,145 100,140 Q155,145 160,195 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M60,150 L100,165 L140,150 L145,195 L55,195 Z" />
+    <!-- Coat Lapels -->
+    <path
+        android:fillColor="#ECEFF1"
+        android:pathData="M80,152 L100,175 L88,195 L72,195 Z" />
+    <path
+        android:fillColor="#ECEFF1"
+        android:pathData="M120,152 L100,175 L112,195 L128,195 Z" />
+
+    <!-- Neck -->
+    <path
+        android:fillColor="#E0A96D"
+        android:pathData="M88,125 L112,125 L112,150 L88,150 Z" />
+
+    <!-- Head -->
+    <path
+        android:fillColor="#E0A96D"
+        android:pathData="M75,65 Q100,55 125,65 Q135,95 125,125 Q100,140 75,125 Q65,95 75,65 Z" />
+
+    <!-- Hair -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M70,72 Q100,45 130,72 Q135,60 125,50 Q100,42 75,50 Q65,60 70,72 Z" />
+
+    <!-- Eyes and Smile -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M86,88m-3,0a3,3 0,1,1 6,0a3,3 0,1,1 -6,0" />
+    <path
+        android:fillColor="#212121"
+        android:pathData="M114,88m-3,0a3,3 0,1,1 6,0a3,3 0,1,1 -6,0" />
+    <path
+        android:strokeColor="#212121"
+        android:strokeWidth="2"
+        android:pathData="M92,108 Q100,115 108,108" />
+
+    <!-- Stethoscope around neck -->
+    <path
+        android:strokeColor="#37474F"
+        android:strokeWidth="3.5"
+        android:pathData="M82,145 C78,160 82,180 94,185 C98,186 100,183 100,178 C100,183 102,186 106,185 C118,180 122,160 118,145" />
+    <!-- Chest Piece / Disc -->
+    <path
+        android:fillColor="#90A4AE"
+        android:pathData="M100,178m-6,0a6,6 0,1,1 12,0a6,6 0,1,1 -12,0" />
+    <path
+        android:fillColor="#455A64"
+        android:pathData="M100,178m-3,0a3,3 0,1,1 6,0a3,3 0,1,1 -3,0" />
+
+    <!-- Cross Badge on Pocket -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M66,172 L70,172 L70,168 L73,168 L73,172 L77,172 L77,175 L73,175 L73,179 L70,179 L70,175 L66,175 Z" />
+</vector>

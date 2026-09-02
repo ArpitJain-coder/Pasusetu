@@ -1,0 +1,92 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Circular Background -->
+    <path
+        android:fillColor="#E8F5E9"
+        android:pathData="M100,10m-90,0a90,90 0,1,1 180,0a90,90 0,1,1 -180,0" />
+
+    <!-- Horns (Gir Cow long sweeping curved horns) -->
+    <path
+        android:fillColor="#4E342E"
+        android:pathData="M65,75 C45,45 35,25 50,20 C62,25 70,55 75,70 Z" />
+    <path
+        android:fillColor="#4E342E"
+        android:pathData="M135,75 C155,45 165,25 150,20 C138,25 130,55 125,70 Z" />
+
+    <!-- Ears (Long pendulous drooping ears characteristic of Gir) -->
+    <path
+        android:fillColor="#D7CCC8"
+        android:pathData="M50,85 C25,100 20,130 35,135 C45,130 55,105 60,90 Z" />
+    <path
+        android:fillColor="#FFCDD2"
+        android:pathData="M46,95 C30,108 26,126 36,130 C42,125 50,108 54,98 Z" />
+
+    <path
+        android:fillColor="#D7CCC8"
+        android:pathData="M150,85 C175,100 180,130 165,135 C155,130 145,105 140,90 Z" />
+    <path
+        android:fillColor="#FFCDD2"
+        android:pathData="M154,95 C170,108 174,126 164,130 C158,125 150,108 146,98 Z" />
+
+    <!-- Head -->
+    <path
+        android:fillColor="#8D6E63"
+        android:pathData="M60,70 Q100,50 140,70 Q150,110 135,150 Q100,175 65,150 Q50,110 60,70 Z" />
+
+    <!-- Prominent Convex Forehead (Gir characteristic) -->
+    <path
+        android:fillColor="#A1887F"
+        android:pathData="M70,68 Q100,56 130,68 Q135,95 100,100 Q65,95 70,68 Z" />
+
+    <!-- White Forehead Blaze -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M95,65 Q100,60 105,65 L108,110 Q100,120 92,110 Z" />
+
+    <!-- Eyes -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M72,100m-7,0a7,7 0,1,1 14,0a7,7 0,1,1 -14,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M70,98m-2,0a2,2 0,1,1 4,0a2,2 0,1,1 -4,0" />
+
+    <path
+        android:fillColor="#212121"
+        android:pathData="M128,100m-7,0a7,7 0,1,1 14,0a7,7 0,1,1 -14,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M126,98m-2,0a2,2 0,1,1 4,0a2,2 0,1,1 -4,0" />
+
+    <!-- Muzzle / Snout -->
+    <path
+        android:fillColor="#4E342E"
+        android:pathData="M75,135 Q100,128 125,135 Q130,165 100,172 Q70,165 75,135 Z" />
+
+    <!-- Nostrils -->
+    <path
+        android:fillColor="#1B1B1B"
+        android:pathData="M84,152m-4,0a4,4 0,1,1 8,0a4,4 0,1,1 -8,0" />
+    <path
+        android:fillColor="#1B1B1B"
+        android:pathData="M116,152m-4,0a4,4 0,1,1 8,0a4,4 0,1,1 -8,0" />
+
+    <!-- Mouth Line -->
+    <path
+        android:fillColor="#1B1B1B"
+        android:strokeColor="#1B1B1B"
+        android:strokeWidth="2"
+        android:pathData="M90,165 Q100,169 110,165" />
+
+    <!-- Yellow Tag on Left Ear (National Animal Identification Tag) -->
+    <path
+        android:fillColor="#FFD600"
+        android:pathData="M52,95 L64,95 L61,114 L49,114 Z" />
+    <path
+        android:fillColor="#212121"
+        android:pathData="M55,100 L59,100 L58,107 L54,107 Z" />
+</vector>

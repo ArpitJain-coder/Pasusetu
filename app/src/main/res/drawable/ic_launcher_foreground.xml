@@ -1,0 +1,37 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Golden circular background disc -->
+    <path
+        android:pathData="M54,54m-33,0a33,33 0,1 1,66 0a33,33 0,1 1,-66 0"
+        android:fillColor="#F9FAFB" />
+    <path
+        android:pathData="M54,54m-30,0a30,30 0,1 1,60 0a30,30 0,1 1,-60 0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54"
+                android:startY="24"
+                android:endX="54"
+                android:endY="84"
+                android:type="linear">
+                <item android:color="#FFF8E1" android:offset="0.0" />
+                <item android:color="#FFE082" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Green plant leaf curve on right -->
+    <path
+        android:pathData="M65,36 C74,38 78,48 76,58 C74,68 64,74 54,76 C60,70 63,62 61,54 C59,46 62,39 65,36 Z"
+        android:fillColor="#2E7D32" />
+    <!-- Orange/amber cattle silhouette (head and horns) -->
+    <path
+        android:pathData="M48,34 C44,30 38,28 35,30 C34,31 37,36 41,38 C37,39 33,43 33,48 C33,53 36,56 40,58 C41,64 45,70 51,72 C56,74 61,72 63,68 C61,65 59,58 56,54 C54,50 54,44 54,41 C57,40 60,36 59,32 C56,29 51,32 48,34 Z"
+        android:fillColor="#E65100" />
+    <!-- White health cross / sparkle emblem -->
+    <path
+        android:pathData="M62,44 h4 v4 h-4 v4 h-4 v-4 h-4 v-4 h4 v-4 h4 Z"
+        android:fillColor="#43A047" />
+</vector>

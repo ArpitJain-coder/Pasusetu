@@ -1,0 +1,6 @@
+{
+  "name": "PashuSetu",
+  "description": "पशुसेतु - Livestock health and veterinary management platform connecting Farmers, Veterinarians, and District Officers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

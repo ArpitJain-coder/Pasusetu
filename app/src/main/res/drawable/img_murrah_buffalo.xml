@@ -1,0 +1,70 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Circular Background -->
+    <path
+        android:fillColor="#ECEFF1"
+        android:pathData="M100,10m-90,0a90,90 0,1,1 180,0a90,90 0,1,1 -180,0" />
+
+    <!-- Murrah Buffalo tightly curled horns -->
+    <path
+        android:fillColor="#263238"
+        android:pathData="M70,70 C50,55 35,30 50,15 C68,5 78,35 80,65 Z" />
+    <path
+        android:fillColor="#263238"
+        android:pathData="M130,70 C150,55 165,30 150,15 C132,5 122,35 120,65 Z" />
+
+    <!-- Ears -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M48,78 C30,82 25,98 38,105 C50,102 55,90 56,82 Z" />
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M152,78 C170,82 175,98 162,105 C150,102 145,90 144,82 Z" />
+
+    <!-- Head (Black Jet Coat) -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M65,65 Q100,55 135,65 Q148,100 138,145 Q100,172 62,145 Q52,100 65,65 Z" />
+
+    <!-- Broad Forehead Plate -->
+    <path
+        android:fillColor="#323232"
+        android:pathData="M72,68 Q100,60 128,68 Q132,95 100,98 Q68,95 72,68 Z" />
+
+    <!-- Eyes -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M75,98m-6,0a6,6 0,1,1 12,0a6,6 0,1,1 -12,0" />
+    <path
+        android:fillColor="#CFD8DC"
+        android:pathData="M74,96m-2,0a2,2 0,1,1 4,0a2,2 0,1,1 -4,0" />
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M125,98m-6,0a6,6 0,1,1 12,0a6,6 0,1,1 -12,0" />
+    <path
+        android:fillColor="#CFD8DC"
+        android:pathData="M124,96m-2,0a2,2 0,1,1 4,0a2,2 0,1,1 -4,0" />
+
+    <!-- Broad Muzzle -->
+    <path
+        android:fillColor="#151515"
+        android:pathData="M72,130 Q100,122 128,130 Q132,162 100,168 Q68,162 72,130 Z" />
+
+    <!-- Nostrils -->
+    <path
+        android:fillColor="#0A0A0A"
+        android:pathData="M83,148m-5,0a5,5 0,1,1 10,0a5,5 0,1,1 -10,0" />
+    <path
+        android:fillColor="#0A0A0A"
+        android:pathData="M117,148m-5,0a5,5 0,1,1 10,0a5,5 0,1,1 -10,0" />
+
+    <!-- Yellow Tag on Ear -->
+    <path
+        android:fillColor="#FFD600"
+        android:pathData="M50,88 L60,88 L58,105 L48,105 Z" />
+</vector>
