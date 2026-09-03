@@ -187,6 +187,38 @@ fun DistrictOfficerDashboardScreen(
                     .fillMaxSize()
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
+                // Officer Profile Header
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = tr("नमस्ते अधिकारी महोदय 👋", "Hello Officer 👋", "नमस्कार अधिकारी महोदय 👋", "નમસ્તે અધિકારી સાહેબ 👋", "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਅਧਿਕਾਰੀ ਸਾਹਿਬ 👋"),
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF1B241C)
+                            )
+                            Text(
+                                text = tr("पशुपालन एवं डेयरी विकास विभाग • जयपुर मंडल", "Animal Husbandry & Dairy Dept • Jaipur Div", "पशूसंवर्धन विभाग • जयपूर विभाग", "પશુપાલન વિભાગ • જયપુર", "ਪਸ਼ੂ ਪਾਲਣ ਵਿਭਾਗ • ਜੈਪੁਰ ਮੰਡਲ"),
+                                fontSize = 12.sp,
+                                color = Color(0xFF616161)
+                            )
+                        }
+                        androidx.compose.foundation.Image(
+                            painter = androidx.compose.ui.res.painterResource(id = com.example.R.drawable.img_officer_avatar),
+                            contentDescription = "Officer Avatar",
+                            modifier = Modifier
+                                .size(52.dp)
+                                .clip(androidx.compose.foundation.shape.CircleShape)
+                        )
+                    }
+                }
+
                 // Filter Controls Row
                 item {
                     Row(

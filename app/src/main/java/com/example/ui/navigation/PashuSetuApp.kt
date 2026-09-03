@@ -62,6 +62,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.data.model.UserRole
 import com.example.ui.components.PashuSetuBottomBar
+import androidx.compose.material.icons.filled.Vaccines
 import com.example.ui.components.RealMapView
 import com.example.ui.components.RoleAvatar
 import com.example.ui.screens.AlertsScreen
@@ -75,6 +76,7 @@ import com.example.ui.screens.MedicinesScreen
 import com.example.ui.screens.MyCattleScreen
 import com.example.ui.screens.ProfileScreen
 import com.example.ui.screens.RoleSelectionScreen
+import com.example.ui.screens.VaccineScheduleScreen
 import com.example.ui.screens.VetDoctorHomeScreen
 import com.example.ui.screens.WelcomeScreen
 import com.example.ui.theme.AmberSecondary
@@ -93,6 +95,7 @@ sealed class Screen {
     data object MyCattleDetail : Screen()
     data object CaseDetail : Screen()
     data object LiveMap : Screen()
+    data object VaccineSchedule : Screen()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,8 +118,10 @@ fun PashuSetuApp(
     val spokenText by viewModel.spokenText.collectAsState()
     val isSpeaking by viewModel.isSpeaking.collectAsState()
     val diagnosisResult by viewModel.diagnosisResult.collectAsState()
+    val isAnalyzingDiagnosis by viewModel.isAnalyzingDiagnosis.collectAsState()
     val selectedCase by viewModel.selectedCase.collectAsState()
     val districtSummary by viewModel.districtSummary.collectAsState()
+    val vaccineList by viewModel.vaccineList.collectAsState()
 
     val isHindi = viewModel.isHindi()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -195,6 +200,17 @@ fun PashuSetuApp(
                     onClick = {
                         scope.launch { drawerState.close() }
                         currentScreen = Screen.RoleSelection
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+                )
+
+                NavigationDrawerItem(
+                    label = { Text(tr("💉 टीकाकरण शेड्यूल व अलर्ट", "💉 Vaccine Schedule & Alerts", "💉 लसीकरण वेळापत्रक व अलर्ट", "💉 રસીકરણ સમયપત્રક અને એલર્ટ", "💉 ਟੀਕਾਕਰਨ ਸਮਾਸੂਚੀ ਅਤੇ ਅਲਰਟ")) },
+                    icon = { Icon(Icons.Default.Vaccines, contentDescription = null, tint = GreenDark) },
+                    selected = false,
+                    onClick = {
+                        scope.launch { drawerState.close() }
+                        currentScreen = Screen.VaccineSchedule
                     },
                     modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                 )
@@ -373,6 +389,7 @@ fun PashuSetuApp(
                         capturedPhoto = capturedPhoto,
                         isHindi = isHindi,
                         selectedLanguage = selectedLanguage,
+                        isAnalyzing = isAnalyzingDiagnosis,
                         isSpeaking = isSpeaking,
                         onSpeakClick = { viewModel.speakDiagnosisAdvice() },
                         onStopSpeakingClick = { viewModel.stopSpeaking() },
@@ -424,6 +441,20 @@ fun PashuSetuApp(
                             isHindi = isHindi
                         )
                     }
+                }
+
+                is Screen.VaccineSchedule -> {
+                    VaccineScheduleScreen(
+                        vaccinesList = vaccineList,
+                        selectedLanguage = selectedLanguage,
+                        onBackClick = { currentScreen = Screen.MainApp },
+                        onMarkCompleted = { vaccineId ->
+                            viewModel.markVaccineCompleted(vaccineId)
+                        },
+                        onAddNewSchedule = { vName, enName, dis, target, date, loc, dose ->
+                            viewModel.addNewVaccineSchedule(vName, enName, dis, target, date, loc, dose)
+                        }
+                    )
                 }
 
                 is Screen.MyCattleDetail -> {
@@ -500,6 +531,7 @@ fun PashuSetuApp(
                                     when (currentTab) {
                                         "home" -> KisanHomeScreen(
                                             cattleList = cattleList,
+                                            vaccineList = vaccineList,
                                             isHindi = isHindi,
                                             selectedLanguage = selectedLanguage,
                                             onLanguageChange = { viewModel.setLanguage(it) },
@@ -511,7 +543,7 @@ fun PashuSetuApp(
                                             onMyCattleClick = { currentScreen = Screen.MyCattleDetail },
                                             onStartDiagnosisClick = { currentScreen = Screen.Diagnosis },
                                             onMedicinesClick = { currentTab = "alerts" },
-                                            onVaccineScheduleClick = { currentTab = "alerts" },
+                                            onVaccineScheduleClick = { currentScreen = Screen.VaccineSchedule },
                                             onOpenMapClick = { currentScreen = Screen.LiveMap },
                                             onEmergencyCallClick = { currentTab = "alerts" }
                                         )
@@ -527,7 +559,11 @@ fun PashuSetuApp(
                                                 viewModel.addNewCattle(tag, type, age, status, breed, notes)
                                             }
                                         )
-                                        "alerts" -> AlertsScreen(selectedLanguage = selectedLanguage)
+                                        "alerts" -> AlertsScreen(
+                                            vaccineList = vaccineList,
+                                            selectedLanguage = selectedLanguage,
+                                            onOpenVaccineSchedule = { currentScreen = Screen.VaccineSchedule }
+                                        )
                                         "profile" -> ProfileScreen(
                                             currentRole = currentRole,
                                             selectedLanguage = selectedLanguage,
@@ -537,6 +573,7 @@ fun PashuSetuApp(
                                         )
                                         else -> KisanHomeScreen(
                                             cattleList = cattleList,
+                                            vaccineList = vaccineList,
                                             isHindi = isHindi,
                                             selectedLanguage = selectedLanguage,
                                             onLanguageChange = { viewModel.setLanguage(it) },
@@ -550,7 +587,7 @@ fun PashuSetuApp(
                                             onMyCattleClick = { currentScreen = Screen.MyCattleDetail },
                                             onStartDiagnosisClick = { currentScreen = Screen.Diagnosis },
                                             onMedicinesClick = { currentTab = "alerts" },
-                                            onVaccineScheduleClick = { currentTab = "alerts" },
+                                            onVaccineScheduleClick = { currentScreen = Screen.VaccineSchedule },
                                             onOpenMapClick = { currentScreen = Screen.LiveMap },
                                             onEmergencyCallClick = { currentTab = "alerts" }
                                         )
@@ -651,7 +688,11 @@ fun PashuSetuApp(
                                             onNotificationsClick = { currentTab = "alerts" },
                                             onDistrictChange = { viewModel.selectDistrict(it) }
                                         )
-                                        "alerts" -> AlertsScreen(selectedLanguage = selectedLanguage)
+                                        "alerts" -> AlertsScreen(
+                                            vaccineList = vaccineList,
+                                            selectedLanguage = selectedLanguage,
+                                            onOpenVaccineSchedule = { currentScreen = Screen.VaccineSchedule }
+                                        )
                                         "more" -> ProfileScreen(
                                             currentRole = currentRole,
                                             selectedLanguage = selectedLanguage,

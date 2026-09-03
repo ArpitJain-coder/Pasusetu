@@ -34,6 +34,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -73,6 +74,7 @@ fun DiagnosisResultScreen(
     capturedPhoto: Bitmap? = null,
     isHindi: Boolean = true,
     selectedLanguage: String = "हिंदी",
+    isAnalyzing: Boolean = false,
     isSpeaking: Boolean = false,
     onSpeakClick: () -> Unit = {},
     onStopSpeakingClick: () -> Unit = {},
@@ -183,6 +185,42 @@ fun DiagnosisResultScreen(
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
+
+                // AI Live Refining Banner
+                if (isAnalyzing) {
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = Color(0xFFE8F5E9),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, GreenDark.copy(alpha = 0.3f)),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(18.dp),
+                                strokeWidth = 2.dp,
+                                color = GreenDark
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = tr(
+                                    "एआई मॉडल द्वारा विस्तृत लक्षणों का विश्लेषण जारी है...",
+                                    "Gemini AI is analyzing symptoms in background...",
+                                    "एआय मॉडेलद्वारे सविस्तर लक्षणांचे विश्लेषण सुरू आहे...",
+                                    "AI મોડેલ દ્વારા વિગતવાર લક્ષણોનું વિશ્લેષણ ચાલુ છે...",
+                                    "AI ਮਾਡਲ ਵੱਲੋਂ ਲੱਛਣਾਂ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ ਜਾਰੀ ਹੈ..."
+                                ),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = GreenDark
+                            )
+                        }
+                    }
+                }
 
                 // Disease Header
                 Text(

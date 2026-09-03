@@ -1,21 +1,31 @@
 package com.example.data.repository
 
+import android.graphics.Bitmap
 import com.example.data.local.AppDatabase
 import com.example.data.model.Appointment
 import com.example.data.model.Cattle
 import com.example.data.model.DistrictSummary
 import com.example.data.model.HeatZone
 import com.example.data.model.MedicalCase
+import com.example.data.model.VaccineRecord
+import com.example.data.model.VaccineStatus
+import com.example.ui.viewmodel.DiagnosisResult
 import kotlinx.coroutines.flow.Flow
 
-class PashuSetuRepository(private val database: AppDatabase) {
+class PashuSetuRepository(
+    private val database: AppDatabase,
+    val diagnosisRepository: LivestockDiagnosisRepository = FirebaseLivestockDiagnosisRepository()
+) {
     private val cattleDao = database.cattleDao()
     private val appointmentDao = database.appointmentDao()
     private val caseDao = database.medicalCaseDao()
+    private val vaccineDao = database.vaccineDao()
 
     val allCattle: Flow<List<Cattle>> = cattleDao.getAllCattle()
     val allAppointments: Flow<List<Appointment>> = appointmentDao.getAllAppointments()
     val allCases: Flow<List<MedicalCase>> = caseDao.getAllCases()
+    val allVaccines: Flow<List<VaccineRecord>> = vaccineDao.getAllVaccineRecords()
+    val dueVaccines: Flow<List<VaccineRecord>> = vaccineDao.getDueVaccines()
 
     suspend fun getCattleByTag(tag: String): Cattle? = cattleDao.getCattleByTag(tag)
     suspend fun getCaseByTag(tag: String): MedicalCase? = caseDao.getCaseByTag(tag)
@@ -30,6 +40,32 @@ class PashuSetuRepository(private val database: AppDatabase) {
 
     suspend fun insertCase(medicalCase: MedicalCase): Long = caseDao.insertCase(medicalCase)
     suspend fun updateCase(medicalCase: MedicalCase) = caseDao.updateCase(medicalCase)
+
+    suspend fun insertVaccine(vaccine: VaccineRecord): Long = vaccineDao.insertVaccine(vaccine)
+    suspend fun updateVaccine(vaccine: VaccineRecord) = vaccineDao.updateVaccine(vaccine)
+    suspend fun updateVaccineStatus(id: Long, status: VaccineStatus) = vaccineDao.updateStatus(id, status)
+
+    /**
+     * Connects with Gemini via the Firebase AI SDK in [diagnosisRepository] to generate
+     * smart diagnosis suggestions, with seamless fallback to clinical heuristic rules.
+     */
+    suspend fun getSmartDiagnosis(
+        cattle: Cattle?,
+        symptoms: Set<String>,
+        voiceNotes: String?,
+        photo: Bitmap?,
+        language: String
+    ): DiagnosisResult {
+        return diagnosisRepository.getSmartDiagnosis(
+            cattle = cattle,
+            symptoms = symptoms,
+            voiceNotes = voiceNotes,
+            photo = photo,
+            language = language
+        ).getOrElse {
+            ClinicalRuleEngine.diagnose(cattle, symptoms, language)
+        }
+    }
 
     suspend fun ensureInitialData() {
         AppDatabase.populateInitialData(database)

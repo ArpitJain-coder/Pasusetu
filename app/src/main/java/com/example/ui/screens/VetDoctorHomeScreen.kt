@@ -167,14 +167,34 @@ fun VetDoctorHomeScreen(
                     .fillMaxSize()
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
-                // Greeting
+                // Greeting with Doctor Avatar
                 item {
-                    Text(
-                        text = tr("नमस्ते डॉ. महेश 👋", "Hello Dr. Mahesh 👋", "नमस्कार डॉ. महेश 👋", "નમસ્તે ડૉ. મહેશ 👋", "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਡਾ. ਮਹੇਸ਼ 👋"),
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = tr("नमस्ते डॉ. महेश 👋", "Hello Dr. Mahesh 👋", "नमस्कार डॉ. महेश 👋", "નમસ્તે ડૉ. મહેશ 👋", "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਡਾ. ਮਹੇਸ਼ 👋"),
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF1B241C)
+                            )
+                            Text(
+                                text = tr("पशु चिकित्सालय, भाटी केंद्र • एम.वी.एससी (सर्जरी)", "Veterinary Hospital, Bhati • MVSc (Surgery)", "पशू रुग्णालय, भाटी केंद्र", "પશુ દવાખાનું, ભાટી કેન્દ્ર", "ਪਸ਼ੂ ਹਸਪਤਾਲ, ਭਾਟੀ ਕੇਂਦਰ"),
+                                fontSize = 12.sp,
+                                color = Color(0xFF616161)
+                            )
+                        }
+                        androidx.compose.foundation.Image(
+                            painter = androidx.compose.ui.res.painterResource(id = com.example.R.drawable.img_vet_doctor),
+                            contentDescription = "Doctor Avatar",
+                            modifier = Modifier
+                                .size(52.dp)
+                                .clip(androidx.compose.foundation.shape.CircleShape)
+                        )
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
                 }
 

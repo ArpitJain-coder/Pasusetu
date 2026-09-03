@@ -1,0 +1,83 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Circular Background with Soft Meadow Green -->
+    <path
+        android:fillColor="#F1F8E9"
+        android:pathData="M100,10m-90,0a90,90 0,1,1 180,0a90,90 0,1,1 -180,0" />
+
+    <!-- Soft Calf Ears (small perky pink inner) -->
+    <path
+        android:fillColor="#8D6E63"
+        android:pathData="M50,75 C30,70 25,88 38,96 C48,94 54,84 56,78 Z" />
+    <path
+        android:fillColor="#FFCDD2"
+        android:pathData="M48,78 C35,74 32,86 40,91 C46,90 50,83 52,80 Z" />
+
+    <path
+        android:fillColor="#8D6E63"
+        android:pathData="M150,75 C170,70 175,88 162,96 C152,94 146,84 144,78 Z" />
+    <path
+        android:fillColor="#FFCDD2"
+        android:pathData="M152,78 C165,74 168,86 160,91 C154,90 150,83 148,80 Z" />
+
+    <!-- Tiny Horn Buds -->
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M72,55 C70,48 76,46 78,52 Z" />
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M128,55 C130,48 124,46 122,52 Z" />
+
+    <!-- Calf Head (Rounder, cuter proportion) -->
+    <path
+        android:fillColor="#A1887F"
+        android:pathData="M65,60 Q100,48 135,60 Q145,95 132,142 Q100,165 68,142 Q55,95 65,60 Z" />
+
+    <!-- White Forehead Star / Patch -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M92,58 Q100,52 108,58 L110,82 Q100,90 90,82 Z" />
+
+    <!-- Big Innocent Eyes with High Gloss Highlight -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M76,92m-7,0a7,7 0,1,1 14,0a7,7 0,1,1 -14,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M74,89m-3,0a3,3 0,1,1 6,0a3,3 0,1,1 -6,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M78,95m-1,0a1,1 0,1,1 2,0a1,1 0,1,1 -2,0" />
+
+    <path
+        android:fillColor="#212121"
+        android:pathData="M124,92m-7,0a7,7 0,1,1 14,0a7,7 0,1,1 -14,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M122,89m-3,0a3,3 0,1,1 6,0a3,3 0,1,1 -6,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M126,95m-1,0a1,1 0,1,1 2,0a1,1 0,1,1 -2,0" />
+
+    <!-- Pink Muzzle -->
+    <path
+        android:fillColor="#FFCCBC"
+        android:pathData="M76,125 Q100,118 124,125 Q128,155 100,160 Q72,155 76,125 Z" />
+
+    <!-- Cute Nostrils -->
+    <path
+        android:fillColor="#D84315"
+        android:pathData="M86,140m-3,0a3,3 0,1,1 6,0a3,3 0,1,1 -6,0" />
+    <path
+        android:fillColor="#D84315"
+        android:pathData="M114,140m-3,0a3,3 0,1,1 6,0a3,3 0,1,1 -6,0" />
+
+    <!-- Yellow Tag on Ear -->
+    <path
+        android:fillColor="#FFD600"
+        android:pathData="M52,86 L60,86 L58,100 L50,100 Z" />
+</vector>

@@ -1,0 +1,118 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Circular Background with Government Blue-Purple Tint -->
+    <path
+        android:fillColor="#EDE7F6"
+        android:pathData="M100,10m-90,0a90,90 0,1,1 180,0a90,90 0,1,1 -180,0" />
+
+    <!-- Ashoka / National Emblem subtle crest circle in background -->
+    <path
+        android:fillColor="#D1C4E9"
+        android:pathData="M100,45m-25,0a25,25 0,1,1 50,0a25,25 0,1,1 -50,0" />
+
+    <!-- Shoulders with Formal Government Officer Blazer / Suit -->
+    <path
+        android:fillColor="#311B92"
+        android:pathData="M40,195 Q45,140 100,135 Q155,140 160,195 Z" />
+
+    <!-- Crisp White Formal Shirt Collar -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M78,142 L100,165 L122,142 L112,195 L88,195 Z" />
+
+    <!-- Deep Maroon/Burgundy Silk Tie -->
+    <path
+        android:fillColor="#B71C1C"
+        android:pathData="M96,150 L104,150 L106,182 L100,192 L94,182 Z" />
+    <!-- Tie Knot -->
+    <path
+        android:fillColor="#880E4F"
+        android:pathData="M95,146 L105,146 L103,153 L97,153 Z" />
+
+    <!-- Official ID Card Lanyard & Gold Officer Lapel Pin -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M65,160m-3,0a3,3 0,1,1 6,0a3,3 0,1,1 -6,0" />
+    <path
+        android:strokeColor="#7E57C2"
+        android:strokeWidth="2"
+        android:pathData="M80,145 L72,175" />
+    <path
+        android:strokeColor="#7E57C2"
+        android:strokeWidth="2"
+        android:pathData="M120,145 L128,175" />
+
+    <!-- Neck -->
+    <path
+        android:fillColor="#C89666"
+        android:pathData="M88,122 L112,122 L112,145 L88,145 Z" />
+
+    <!-- Officer Head -->
+    <path
+        android:fillColor="#C89666"
+        android:pathData="M72,62 Q100,52 128,62 Q136,95 126,124 Q100,138 74,124 Q64,95 72,62 Z" />
+
+    <!-- Trim Professional Haircut -->
+    <path
+        android:fillColor="#263238"
+        android:pathData="M68,68 Q100,42 132,68 Q136,54 126,44 Q100,36 74,44 Q64,54 68,68 Z" />
+
+    <!-- Ears -->
+    <path
+        android:fillColor="#C89666"
+        android:pathData="M65,85m-5,0a5,5 0,1,1 10,0a5,5 0,1,1 -10,0" />
+    <path
+        android:fillColor="#C89666"
+        android:pathData="M135,85m-5,0a5,5 0,1,1 10,0a5,5 0,1,1 -10,0" />
+
+    <!-- Elegant Modern Spectacles (District Officer Glasses) -->
+    <!-- Left Rim -->
+    <path
+        android:strokeColor="#212121"
+        android:strokeWidth="2"
+        android:fillColor="#40E0F7FA"
+        android:pathData="M75,80 L92,80 L92,92 L75,92 Z" />
+    <!-- Right Rim -->
+    <path
+        android:strokeColor="#212121"
+        android:strokeWidth="2"
+        android:fillColor="#40E0F7FA"
+        android:pathData="M108,80 L125,80 L125,92 L108,92 Z" />
+    <!-- Bridge -->
+    <path
+        android:strokeColor="#212121"
+        android:strokeWidth="2"
+        android:pathData="M92,84 L108,84" />
+
+    <!-- Eyes Behind Glasses -->
+    <path
+        android:fillColor="#212121"
+        android:pathData="M83,86m-2.5,0a2.5,2.5 0,1,1 5,0a2.5,2.5 0,1,1 -5,0" />
+    <path
+        android:fillColor="#212121"
+        android:pathData="M116,86m-2.5,0a2.5,2.5 0,1,1 5,0a2.5,2.5 0,1,1 -5,0" />
+
+    <!-- Eyebrows -->
+    <path
+        android:strokeColor="#263238"
+        android:strokeWidth="2"
+        android:pathData="M76,75 Q84,72 92,75" />
+    <path
+        android:strokeColor="#263238"
+        android:strokeWidth="2"
+        android:pathData="M108,75 Q116,72 124,75" />
+
+    <!-- Nose & Confident Professional Smile -->
+    <path
+        android:strokeColor="#A07246"
+        android:strokeWidth="1.5"
+        android:pathData="M100,88 L100,98 L103,101" />
+    <path
+        android:strokeColor="#37474F"
+        android:strokeWidth="2"
+        android:pathData="M93,114 Q100,119 107,114" />
+</vector>

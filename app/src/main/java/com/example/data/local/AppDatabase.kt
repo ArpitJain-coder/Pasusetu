@@ -8,19 +8,22 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.data.model.Appointment
 import com.example.data.model.Cattle
 import com.example.data.model.MedicalCase
+import com.example.data.model.VaccineRecord
+import com.example.data.model.VaccineStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Database(
-    entities = [Cattle::class, Appointment::class, MedicalCase::class],
-    version = 1,
+    entities = [Cattle::class, Appointment::class, MedicalCase::class, VaccineRecord::class],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun cattleDao(): CattleDao
     abstract fun appointmentDao(): AppointmentDao
     abstract fun medicalCaseDao(): MedicalCaseDao
+    abstract fun vaccineDao(): VaccineDao
 
     companion object {
         @Volatile
@@ -33,6 +36,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "pashusetu_database"
                 )
+                .fallbackToDestructiveMigration()
                 .addCallback(DatabaseCallback(scope))
                 .build()
                 INSTANCE = instance
@@ -171,6 +175,98 @@ abstract class AppDatabase : RoomDatabase() {
                         nextVisit = "17 मई 2025",
                         riskLevel = "उच्च",
                         status = "उपचाराधीन"
+                    )
+                )
+            )
+
+            // Pre-populate Standard Indian Veterinary Vaccine Schedule
+            val vaccineDao = database.vaccineDao()
+            vaccineDao.insertAll(
+                listOf(
+                    VaccineRecord(
+                        vaccineName = "FMD बूस्टर वैक्सीन (खुरपका-मुंहपका)",
+                        englishName = "FMD Booster Vaccine",
+                        targetDisease = "खुरपका व मुंहपका विषाणु जनित रोग",
+                        targetAnimal = "सभी वयस्क गाय व भैंस",
+                        scheduledDate = "20 मई 2025 (3 दिन शेष)",
+                        dueDateIso = "2025-05-20",
+                        locationCenter = "गाँव भाटी प्राथमिक पशु केंद्र",
+                        status = VaccineStatus.DUE,
+                        batchOrCattleTag = "गाय (G001, G003) व भैंस (B002)",
+                        dosage = "2 ml subcutaneous",
+                        intervalOrFrequency = "हर 6 माह में बूस्टर खुराक",
+                        isGovernmentCamp = true,
+                        isAlertActive = true,
+                        alertMessageHindi = "अलर्ट: FMD बूस्टर का समय हो गया है! कोटपूतली क्षेत्र में संक्रमण के मामलों के कारण तुरंत लगवाएं।",
+                        alertMessageEnglish = "Alert: FMD booster vaccine is due! Outbreak cases reported nearby in Kotputli block."
+                    ),
+                    VaccineRecord(
+                        vaccineName = "ब्रूसेलोसिस कॉटन 19 स्ट्रेन",
+                        englishName = "Brucellosis S19 Strain Vaccine",
+                        targetDisease = "ब्रूसेलोसिस (गर्भपात रोग)",
+                        targetAnimal = "मादा बछिया (उम्र 4-8 महीने)",
+                        scheduledDate = "25 मई 2025",
+                        dueDateIso = "2025-05-25",
+                        locationCenter = "कोटपूतली पशु चिकित्सालय शिविर",
+                        status = VaccineStatus.DUE,
+                        batchOrCattleTag = "बछड़ा – C004 व युवा बछिया",
+                        dosage = "2 ml sub-cut",
+                        intervalOrFrequency = "जीवन में केवल एक बार (4-8 माह आयु)",
+                        isGovernmentCamp = true,
+                        isAlertActive = true,
+                        alertMessageHindi = "अलर्ट: 4-8 माह की मादा बछिया के लिए ब्रूसेलोसिस टीका अनिवार्य है।",
+                        alertMessageEnglish = "Alert: Brucellosis calfhood vaccination mandatory for female calves aged 4-8 months."
+                    ),
+                    VaccineRecord(
+                        vaccineName = "गलघोंटू (HS) वर्षा-पूर्व वैक्सीन",
+                        englishName = "HS (Hemorrhagic Septicemia) Pre-Monsoon",
+                        targetDisease = "पाश्चुरेला जीवाणु से होने वाला गलघोंटू",
+                        targetAnimal = "सभी गाय व भैंस",
+                        scheduledDate = "10 जून 2025",
+                        dueDateIso = "2025-06-10",
+                        locationCenter = "गाँव भाटी पशु उपकेंद्र",
+                        status = VaccineStatus.UPCOMING,
+                        batchOrCattleTag = "समस्त पशुधन",
+                        dosage = "5 ml sub-cut (Alum-precipitated)",
+                        intervalOrFrequency = "वार्षिक (मानसून शुरू होने से पहले मई-जून)",
+                        isGovernmentCamp = true,
+                        isAlertActive = false,
+                        alertMessageHindi = "मानसून से पूर्व गलघोंटू का टीका अवश्य लगवाएं।",
+                        alertMessageEnglish = "Ensure HS pre-monsoon vaccination before rainy season begins."
+                    ),
+                    VaccineRecord(
+                        vaccineName = "लंगड़ा बुखार (Black Quarter - BQ)",
+                        englishName = "BQ (Black Quarter) Vaccine",
+                        targetDisease = "क्लॉस्ट्रिडियम जीवाणु से होने वाला लंगड़ा रोग",
+                        targetAnimal = "युवा पशु (6 माह से 2 वर्ष आयु)",
+                        scheduledDate = "28 जून 2025",
+                        dueDateIso = "2025-06-28",
+                        locationCenter = "गाँव भाटी पशु उपकेंद्र",
+                        status = VaccineStatus.UPCOMING,
+                        batchOrCattleTag = "युवा पशु (G003, C004)",
+                        dosage = "5 ml sub-cut",
+                        intervalOrFrequency = "वार्षिक (मानसून पूर्व)",
+                        isGovernmentCamp = true,
+                        isAlertActive = false,
+                        alertMessageHindi = "बारिश से पूर्व युवा मवेशियों में BQ का टीका लगवाएं।",
+                        alertMessageEnglish = "Administer BQ vaccine to young stock before monsoon."
+                    ),
+                    VaccineRecord(
+                        vaccineName = "लम्पी स्किन रोग (LSD) गोट पॉक्स वैक्सीन",
+                        englishName = "Lumpy Skin Disease (Goat Pox) Vaccine",
+                        targetDisease = "गांठदार त्वचा रोग (विषाणु जनित)",
+                        targetAnimal = "सभी गोवंश",
+                        scheduledDate = "15 जनवरी 2025",
+                        dueDateIso = "2025-01-15",
+                        locationCenter = "राजकीय पशु चिकित्सालय",
+                        status = VaccineStatus.COMPLETED,
+                        batchOrCattleTag = "गाय G001, G003",
+                        dosage = "3 ml sub-cut",
+                        intervalOrFrequency = "वार्षिक (वर्ष में एक बार)",
+                        isGovernmentCamp = true,
+                        isAlertActive = false,
+                        alertMessageHindi = "लम्पी स्किन टीकाकरण सफलतापूर्वक पूर्ण हो चुका है।",
+                        alertMessageEnglish = "LSD vaccination completed successfully."
                     )
                 )
             )

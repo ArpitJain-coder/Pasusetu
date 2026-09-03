@@ -11,6 +11,8 @@ import com.example.data.model.Cattle
 import com.example.data.model.DistrictSummary
 import com.example.data.model.MedicalCase
 import com.example.data.model.UserRole
+import com.example.data.model.VaccineRecord
+import com.example.data.model.VaccineStatus
 import com.example.data.repository.PashuSetuRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,7 +25,7 @@ import java.util.Locale
 data class DiagnosisResult(
     val diseaseName: String = "खुरपका मुंहपका (FMD)",
     val englishName: String = "Foot and Mouth Disease",
-    val riskLevel: String = "मध्यम", // "उच्च", "मध्यम", "कम"
+    val riskLevel: String = "मध्यम", // "उच्च", "मध्यम", "कम", "सामान्य"
     val riskColor: Long = 0xFFF57C00,
     val precautions: List<String> = listOf(
         "पशु को अलग रखें",
@@ -35,7 +37,13 @@ data class DiagnosisResult(
         "Melonex ORS",
         "टेट्रासाइक्लिन (Tetracycline)",
         "विटामिन बी-कॉम्प्लेक्स"
-    )
+    ),
+    val clinicalSummary: String = "",
+    val differentialDiagnosis: List<String> = emptyList(),
+    val confidenceScore: Int = 85,
+    val isAiPowered: Boolean = true,
+    val emergencyHelpline: String = "1962",
+    val rawAiResponse: String = ""
 )
 
 data class UserProfile(
@@ -63,6 +71,12 @@ class PashuSetuViewModel(application: Application) : AndroidViewModel(applicatio
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val caseList: StateFlow<List<MedicalCase>> = repository.allCases
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val vaccineList: StateFlow<List<VaccineRecord>> = repository.allVaccines
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val dueVaccinesList: StateFlow<List<VaccineRecord>> = repository.dueVaccines
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // Role state
@@ -102,6 +116,9 @@ class PashuSetuViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val _diagnosisResult = MutableStateFlow(DiagnosisResult())
     val diagnosisResult: StateFlow<DiagnosisResult> = _diagnosisResult.asStateFlow()
+
+    private val _isAnalyzingDiagnosis = MutableStateFlow(false)
+    val isAnalyzingDiagnosis: StateFlow<Boolean> = _isAnalyzingDiagnosis.asStateFlow()
 
     // Selected Case for Vet View
     private val _selectedCase = MutableStateFlow<MedicalCase?>(null)
@@ -293,72 +310,41 @@ class PashuSetuViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun performDiagnosis(): DiagnosisResult {
-        val symptoms = _selectedSymptoms.value
-        val hasMouthLesions = symptoms.any { it.contains("छाले") || it.contains("लार") }
-        val hasFever = symptoms.any { it.contains("बुखार") }
-        val hasLimping = symptoms.any { it.contains("लंगड़ाना") || it.contains("खुर") }
+        // Immediate initial diagnosis from clinical rule engine
+        val immediateResult = com.example.data.repository.ClinicalRuleEngine.diagnose(
+            cattle = _selectedCattleForDiagnosis.value,
+            symptoms = _selectedSymptoms.value,
+            language = _selectedLanguage.value
+        )
+        _diagnosisResult.value = immediateResult
 
-        val result = when {
-            hasMouthLesions || hasLimping -> DiagnosisResult(
-                diseaseName = "खुरपका मुंहपका (FMD)",
-                englishName = "Foot and Mouth Disease",
-                riskLevel = if (hasFever) "उच्च" else "मध्यम",
-                riskColor = if (hasFever) 0xFFD32F2F else 0xFFF57C00,
-                precautions = listOf(
-                    "पशु को अन्य पशुओं से तुरंत अलग रखें",
-                    "साफ पानी और सुपाच्य हरा चारा दें",
-                    "पशु बाड़े को फिनाइल या चूने से रोगाणुरहित करें",
-                    "मुंह और खुरों को लाल दवा (पोटैशियम परमैंगनेट) से धोएं",
-                    "नजदीकी पशु चिकित्सक से तुरंत परामर्श लें"
-                ),
-                recommendedMedicines = listOf(
-                    "Melonex ORS (एंटी-इंफ्लेमेटरी)",
-                    "टेट्रासाइक्लिन (Tetracycline एंटीबायोटिक)",
-                    "विटामिन बी-कॉम्प्लेक्स और एंटीसेप्टिक स्प्रे"
+        // Asynchronously query Firebase AI (Gemini) through the Repository layer
+        viewModelScope.launch {
+            _isAnalyzingDiagnosis.value = true
+            try {
+                val smartResult = repository.getSmartDiagnosis(
+                    cattle = _selectedCattleForDiagnosis.value,
+                    symptoms = _selectedSymptoms.value,
+                    voiceNotes = _spokenText.value,
+                    photo = _capturedPhoto.value,
+                    language = _selectedLanguage.value
                 )
-            )
-            hasFever -> DiagnosisResult(
-                diseaseName = "गलघोंटू (HS - Hemorrhagic Septicemia)",
-                englishName = "Hemorrhagic Septicemia",
-                riskLevel = "उच्च",
-                riskColor = 0xFFD32F2F,
-                precautions = listOf(
-                    "पशु को शांत व छायादार स्थान पर रखें",
-                    "गले में सूजन की स्थिति में ठंडे पानी की पट्टी रखें",
-                    "तुरंत सरकारी पशु चिकित्सालय 1962 पर कॉल करें"
-                ),
-                recommendedMedicines = listOf(
-                    "सल्फोनामाइड इंजेक्शन",
-                    "एंटीपायरेटिक (बुखार रोधी)"
-                )
-            )
-            else -> DiagnosisResult(
-                diseaseName = "अपच / पेट का विकार (Indigestion)",
-                englishName = "Mild Indigestion",
-                riskLevel = "सामान्य",
-                riskColor = 0xFF388E3C,
-                precautions = listOf(
-                    "गुनगुना पानी और अजवाइन का काढ़ा दें",
-                    "24 घंटे तक भारी सूखा चारा न दें",
-                    "पशु की स्थिति पर नजर रखें"
-                ),
-                recommendedMedicines = listOf(
-                    "हिमालय बतीसा (Himalayan Batisa)",
-                    "पाचक चूर्ण"
-                )
-            )
-        }
-        _diagnosisResult.value = result
+                _diagnosisResult.value = smartResult
 
-        // If a cattle was diagnosed, also update cattle status in DB if sick
-        _selectedCattleForDiagnosis.value?.let { cattle ->
-            if (result.riskLevel != "सामान्य") {
-                viewModelScope.launch {
-                    repository.updateCattle(cattle.copy(status = "बीमार", notes = result.diseaseName))
+                // If a cattle was diagnosed, also update cattle status in DB if sick
+                _selectedCattleForDiagnosis.value?.let { cattle ->
+                    if (smartResult.riskLevel != "सामान्य") {
+                        repository.updateCattle(cattle.copy(status = "बीमार", notes = smartResult.diseaseName))
+                    }
                 }
+            } catch (e: Exception) {
+                android.util.Log.e("PashuSetuViewModel", "Failed fetching Gemini diagnosis", e)
+            } finally {
+                _isAnalyzingDiagnosis.value = false
             }
         }
-        return result
+
+        return immediateResult
     }
 
     fun selectCase(medicalCase: MedicalCase) {
@@ -413,6 +399,43 @@ class PashuSetuViewModel(application: Application) : AndroidViewModel(applicatio
                     timeSlot = timeSlot,
                     date = "आज",
                     reason = reason
+                )
+            )
+        }
+    }
+
+    fun markVaccineCompleted(vaccineId: Long) {
+        viewModelScope.launch {
+            repository.updateVaccineStatus(vaccineId, VaccineStatus.COMPLETED)
+        }
+    }
+
+    fun addNewVaccineSchedule(
+        vaccineName: String,
+        englishName: String,
+        targetDisease: String,
+        targetAnimal: String,
+        scheduledDate: String,
+        locationCenter: String,
+        dosage: String = "2 ml",
+        intervalOrFrequency: String = "छमाही",
+        alertMsg: String = ""
+    ) {
+        viewModelScope.launch {
+            repository.insertVaccine(
+                VaccineRecord(
+                    vaccineName = vaccineName,
+                    englishName = englishName,
+                    targetDisease = targetDisease,
+                    targetAnimal = targetAnimal,
+                    scheduledDate = scheduledDate,
+                    locationCenter = locationCenter,
+                    dosage = dosage,
+                    intervalOrFrequency = intervalOrFrequency,
+                    status = VaccineStatus.DUE,
+                    isAlertActive = true,
+                    alertMessageHindi = alertMsg.ifBlank { "नया टीकाकरण निर्धारित: $vaccineName" },
+                    alertMessageEnglish = "New vaccine scheduled: $englishName"
                 )
             )
         }

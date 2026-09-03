@@ -30,8 +30,12 @@ import androidx.compose.material.icons.filled.LocalHospital
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Medication
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.Vaccines
+import androidx.compose.material.icons.filled.Warning
+import com.example.data.model.VaccineRecord
+import com.example.data.model.VaccineStatus
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -78,6 +82,7 @@ import com.example.ui.util.AppStrings
 @Composable
 fun KisanHomeScreen(
     cattleList: List<Cattle>,
+    vaccineList: List<VaccineRecord> = emptyList(),
     isHindi: Boolean = true,
     selectedLanguage: String = "हिंदी",
     onLanguageChange: (String) -> Unit = {},
@@ -214,12 +219,33 @@ fun KisanHomeScreen(
                         }
                     }
 
+                    // Notification Bell with dynamic Due Vaccine Alert badge
+                    val dueVaccineCount = vaccineList.count { it.status == VaccineStatus.DUE || it.status == VaccineStatus.OVERDUE }
                     IconButton(onClick = onNotificationsClick) {
-                        Icon(
-                            imageVector = Icons.Default.NotificationsNone,
-                            contentDescription = "Notifications",
-                            tint = Color(0xFF1B241C)
-                        )
+                        Box {
+                            Icon(
+                                imageVector = if (dueVaccineCount > 0) Icons.Default.NotificationsActive else Icons.Default.NotificationsNone,
+                                contentDescription = "Notifications",
+                                tint = if (dueVaccineCount > 0) Color(0xFFE65100) else Color(0xFF1B241C)
+                            )
+                            if (dueVaccineCount > 0) {
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                        .size(16.dp)
+                                        .clip(CircleShape)
+                                        .background(Color(0xFFC62828)),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = "$dueVaccineCount",
+                                        color = Color.White,
+                                        fontSize = 10.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            }
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
@@ -230,13 +256,13 @@ fun KisanHomeScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
-                // Greeting & Location
+                // Greeting & Location with Farmer Avatar
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column {
+                    Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = tr("नमस्ते, ${farmerName.take(15)} जी 👋", "Hello, ${farmerName.take(15)} 👋", "नमस्कार, ${farmerName.take(15)} जी 👋", "નમસ્તે, ${farmerName.take(15)} ભાઈ 👋", "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ, ${farmerName.take(15)} ਜੀ 👋"),
                             fontSize = 20.sp,
@@ -249,6 +275,14 @@ fun KisanHomeScreen(
                             color = Color(0xFF616161)
                         )
                     }
+                    Image(
+                        painter = painterResource(id = R.drawable.img_farmer_avatar),
+                        contentDescription = "Farmer Avatar",
+                        modifier = Modifier
+                            .size(52.dp)
+                            .clip(CircleShape)
+                            .border(1.5.dp, GreenPrimary, CircleShape)
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(14.dp))
@@ -457,6 +491,82 @@ fun KisanHomeScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Dynamic Next Scheduled Vaccine Card with Due Alert Banner
+                val nextVaccine = vaccineList.firstOrNull { it.status == VaccineStatus.DUE || it.status == VaccineStatus.OVERDUE }
+                    ?: vaccineList.firstOrNull { it.status == VaccineStatus.UPCOMING }
+                    ?: vaccineList.firstOrNull()
+
+                // Urgent Alert Banner if any vaccine is due/overdue
+                val hasDueVaccines = vaccineList.any { it.status == VaccineStatus.DUE || it.status == VaccineStatus.OVERDUE }
+                if (hasDueVaccines) {
+                    val dueItem = vaccineList.firstOrNull { it.status == VaccineStatus.DUE || it.status == VaccineStatus.OVERDUE }
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onVaccineScheduleClick() },
+                        shape = RoundedCornerShape(14.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0)),
+                        border = CardDefaults.outlinedCardBorder().copy(width = 1.dp, brush = androidx.compose.ui.graphics.SolidColor(Color(0xFFFF9800)))
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(36.dp)
+                                    .clip(CircleShape)
+                                    .background(Color(0xFFE65100)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.NotificationsActive,
+                                    contentDescription = "Alert",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(10.dp))
+
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = tr("⚠️ टीकाकरण अलर्ट: टीका बाकी है!", "⚠️ Vaccination Alert: Vaccine Due!", "⚠️ लसीकरण अलर्ट: लस बाकी आहे!", "⚠️ રસીકરણ એલર્ટ: રસી બાકી છે!", "⚠️ ਟੀਕਾਕਰਨ ਅਲਰਟ: ਟੀਕਾ ਬਾਕੀ ਹੈ!"),
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFFD84315)
+                                )
+                                Text(
+                                    text = if (dueItem != null) {
+                                        "${if (selectedLanguage == "English") dueItem.englishName else dueItem.vaccineName} • ${dueItem.scheduledDate}"
+                                    } else {
+                                        tr("नजदीकी केंद्र पर टीकाकरण कराएं", "Visit nearest center for vaccination")
+                                    },
+                                    fontSize = 11.sp,
+                                    color = Color(0xFF5D4037)
+                                )
+                            }
+
+                            Surface(
+                                shape = RoundedCornerShape(6.dp),
+                                color = Color(0xFFE65100)
+                            ) {
+                                Text(
+                                    text = tr("देखें →", "View →", "पहा →", "જુઓ →", "ਵੇਖੋ →"),
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+
                 // "अगला टीकाकरण" Card
                 Card(
                     modifier = Modifier
@@ -473,22 +583,47 @@ fun KisanHomeScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Column {
-                            Text(
-                                text = tr("अगला टीकाकरण (Scheduled Vaccine)", "Next Scheduled Vaccine", "पुढील नियोजित लसीकरण", "આગામી રસીકરણ", "ਅਗਲਾ ਟੀਕਾਕਰਨ"),
-                                fontSize = 13.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF616161)
-                            )
+                        Column(modifier = Modifier.weight(1f)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = tr("अगला टीकाकरण (Vaccine Schedule)", "Next Scheduled Vaccine", "पुढील नियोजित लसीकरण", "આગામી રસીકરણ", "ਅਗਲਾ ਟੀਕਾਕਰਨ"),
+                                    fontSize = 13.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color(0xFF616161)
+                                )
+                                if (nextVaccine?.status == VaccineStatus.DUE || nextVaccine?.status == VaccineStatus.OVERDUE) {
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Surface(
+                                        shape = RoundedCornerShape(4.dp),
+                                        color = Color(0xFFFFEBEE)
+                                    ) {
+                                        Text(
+                                            text = tr("बाकी (Due)", "Due"),
+                                            fontSize = 10.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color(0xFFC62828),
+                                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                                        )
+                                    }
+                                }
+                            }
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = tr("FMD बूस्टर वैक्सीन (गौशाला बैच)", "FMD Booster Vaccine (Dairy Batch)", "FMD बूस्टर लस (गोशाळा तुकडी)", "FMD બૂસ્ટર રસી (ગૌશાળા બેચ)", "FMD ਬੂਸਟਰ ਵੈਕਸੀਨ (ਗਊਸ਼ਾਲਾ ਬੈਚ)"),
+                                text = if (nextVaccine != null) {
+                                    if (selectedLanguage == "English") nextVaccine.englishName else nextVaccine.vaccineName
+                                } else {
+                                    tr("FMD बूस्टर वैक्सीन (गौशाला बैच)", "FMD Booster Vaccine (Dairy Batch)")
+                                },
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF1B241C)
                             )
                             Text(
-                                text = tr("दिनांक: 20 मई 2025 • गाँव भाटी केंद्र", "Date: 20 May 2025 • Bhati Center", "तारीख: 20 मे 2025 • गाव भाटी केंद्र", "તારીખ: 20 મે 2025 • ગામ ભાટી કેન્દ્ર", "ਮਿਤੀ: 20 ਮਈ 2025 • ਪਿੰਡ ਭਾਟੀ ਕੇਂਦਰ"),
+                                text = if (nextVaccine != null) {
+                                    "${tr("दिनांक", "Date")}: ${nextVaccine.scheduledDate} • ${nextVaccine.locationCenter}"
+                                } else {
+                                    tr("दिनांक: 20 मई 2025 • गाँव भाटी केंद्र", "Date: 20 May 2025 • Bhati Center")
+                                },
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = GreenDark

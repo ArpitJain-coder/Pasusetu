@@ -45,7 +45,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.filled.Vaccines
 import com.example.data.model.UserRole
+import com.example.data.model.VaccineRecord
+import com.example.data.model.VaccineStatus
 import com.example.ui.components.RoleAvatar
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.GreenPrimary
@@ -61,10 +64,12 @@ data class AlertItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlertsScreen(
+    vaccineList: List<VaccineRecord> = emptyList(),
     selectedLanguage: String = "हिंदी",
+    onOpenVaccineSchedule: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    fun tr(hi: String, en: String, mr: String, gu: String, pa: String): String = when (selectedLanguage) {
+    fun tr(hi: String, en: String, mr: String = hi, gu: String = hi, pa: String = hi): String = when (selectedLanguage) {
         "English" -> en
         "मराठी" -> mr
         "ગુજરાતી" -> gu
@@ -126,12 +131,107 @@ fun AlertsScreen(
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
             )
 
+            val dueVaccines = vaccineList.filter { it.status == VaccineStatus.DUE || it.status == VaccineStatus.OVERDUE }
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                // Dynamic Due Vaccination Alert Cards if due
+                if (dueVaccines.isNotEmpty()) {
+                    item {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onOpenVaccineSchedule() },
+                            shape = RoundedCornerShape(14.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0)),
+                            border = CardDefaults.outlinedCardBorder().copy(
+                                width = 1.5.dp,
+                                brush = androidx.compose.ui.graphics.SolidColor(Color(0xFFE65100))
+                            )
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .clip(CircleShape)
+                                            .background(Color(0xFFE65100)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Vaccines,
+                                            contentDescription = "Vaccine Alert",
+                                            tint = Color.White,
+                                            modifier = Modifier.size(22.dp)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(
+                                            text = tr("🔔 अति-आवश्यक: टीकाकरण बाकी है!", "🔔 Urgent: Vaccination Due!", "🔔 अति-तातडीचे: लसीकरण बाकी!", "🔔 અતિ-જરૂરી: રસીકરણ બાકી!", "🔔 ਬਹੁਤ ਜ਼ਰੂਰੀ: ਟੀਕਾਕਰਨ ਬਾਕੀ!"),
+                                            fontSize = 15.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = Color(0xFFD84315)
+                                        )
+                                        Text(
+                                            text = tr("${dueVaccines.size} टीके आपके पशुओं के लिए निर्धारित हैं।", "${dueVaccines.size} vaccines are due for your herd.", "तुमच्या पशूंसाठी ${dueVaccines.size} लस बाकी आहेत.", "તમારા પશુઓ માટે ${dueVaccines.size} રસી બાકી છે.", "ਤੁਹਾਡੇ ਪਸ਼ੂਆਂ ਲਈ ${dueVaccines.size} ਟੀਕੇ ਬਾਕੀ ਹਨ।"),
+                                            fontSize = 12.sp,
+                                            color = Color(0xFF5D4037)
+                                        )
+                                    }
+                                }
+
+                                Spacer(modifier = Modifier.height(10.dp))
+
+                                dueVaccines.forEach { vaccine ->
+                                    Surface(
+                                        shape = RoundedCornerShape(8.dp),
+                                        color = Color.White,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 4.dp)
+                                    ) {
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(10.dp),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Column(modifier = Modifier.weight(1f)) {
+                                                Text(
+                                                    text = if (selectedLanguage == "English") vaccine.englishName else vaccine.vaccineName,
+                                                    fontSize = 13.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = Color(0xFF1B241C)
+                                                )
+                                                Text(
+                                                    text = "${tr("नियत तिथि", "Due")}: ${vaccine.scheduledDate} • ${vaccine.targetAnimal}",
+                                                    fontSize = 11.sp,
+                                                    color = Color(0xFFD84315)
+                                                )
+                                            }
+
+                                            Button(
+                                                onClick = onOpenVaccineSchedule,
+                                                shape = RoundedCornerShape(6.dp),
+                                                colors = ButtonDefaults.buttonColors(containerColor = GreenDark),
+                                                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+                                            ) {
+                                                Text(tr("शेड्यूल देखें", "Schedule"), fontSize = 11.sp)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 items(alerts) { alert ->
                     Card(
                         modifier = Modifier.fillMaxWidth(),

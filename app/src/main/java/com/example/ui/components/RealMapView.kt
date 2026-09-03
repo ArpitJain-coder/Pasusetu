@@ -58,7 +58,10 @@ import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import com.example.util.LocationHelper
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -203,6 +206,9 @@ fun RealMapView(
         )
     }
 
+    val locationHelper = remember { LocationHelper(context) }
+    val coroutineScope = rememberCoroutineScope()
+
     // Permission launcher for Location
     val locationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
@@ -210,44 +216,40 @@ fun RealMapView(
         val granted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
                 permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
         if (granted) {
-            try {
-                val lm = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
-                val loc = lm?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                    ?: lm?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                if (loc != null) {
-                    centerLat = loc.latitude
-                    centerLon = loc.longitude
+            isLocationLoading = true
+            coroutineScope.launch {
+                try {
+                    val loc = locationHelper.getCurrentLocation() ?: locationHelper.getLastLocation()
+                    if (loc != null) {
+                        centerLat = loc.latitude
+                        centerLon = loc.longitude
+                    }
+                } finally {
+                    isLocationLoading = false
                 }
-            } catch (_: SecurityException) { }
+            }
         }
     }
 
     fun requestLocation() {
-        val fineGranted = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-        if (fineGranted) {
-            try {
-                val lm = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
-                val loc = lm?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                    ?: lm?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                if (loc != null) {
-                    centerLat = loc.latitude
-                    centerLon = loc.longitude
-                } else {
-                    // Default to farm center
-                    centerLat = 26.9180
-                    centerLon = 75.7950
+        if (locationHelper.hasPermission()) {
+            isLocationLoading = true
+            coroutineScope.launch {
+                try {
+                    val loc = locationHelper.getCurrentLocation() ?: locationHelper.getLastLocation()
+                    if (loc != null) {
+                        centerLat = loc.latitude
+                        centerLon = loc.longitude
+                    } else {
+                        centerLat = LocationHelper.DEFAULT_FARM_LAT
+                        centerLon = LocationHelper.DEFAULT_FARM_LON
+                    }
+                } finally {
+                    isLocationLoading = false
                 }
-            } catch (_: SecurityException) { }
+            }
         } else {
-            locationPermissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            )
+            locationPermissionLauncher.launch(LocationHelper.REQUIRED_PERMISSIONS)
         }
     }
 
@@ -624,8 +626,11 @@ fun RealMapView(
                         // Directions via Google Maps / External Map
                         OutlinedButton(
                             onClick = {
-                                val gmmIntentUri = Uri.parse("geo:${pin.latitude},${pin.longitude}?q=${pin.latitude},${pin.longitude}(${Uri.encode(pin.titleEnglish)})")
-                                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                                val mapIntent = LocationHelper.getDirectionsIntent(
+                                    destLat = pin.latitude,
+                                    destLon = pin.longitude,
+                                    label = if (isHindi) pin.titleHindi else pin.titleEnglish
+                                )
                                 context.startActivity(mapIntent)
                             },
                             modifier = Modifier.weight(1f)
