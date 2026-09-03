@@ -10,6 +10,7 @@ import android.speech.RecognizerIntent
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -79,8 +80,13 @@ import androidx.core.content.ContextCompat
 import com.example.R
 import com.example.data.model.Cattle
 import com.example.ui.components.CattleAvatar
+import com.example.ui.theme.BorderLight
+import com.example.ui.theme.GreenContainer
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.GreenPrimary
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.TextTertiary
 import com.example.ui.util.AppStrings
 import java.util.Locale
 
@@ -252,7 +258,7 @@ fun CattleDiagnosisScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color(0xFFF9FAF8)
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // Top App Bar
@@ -262,7 +268,7 @@ fun CattleDiagnosisScreen(
                         text = tr("पशु स्वास्थ्य जाँच (AI)", "Cattle Health Diagnosis (AI)", "पशू आरोग्य तपासणी (AI)", "પશુ આરોગ્ય તપાસ (AI)", "ਪਸ਼ੂ ਸਿਹਤ ਜਾਂਚ (AI)"),
                         fontSize = 19.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -270,11 +276,11 @@ fun CattleDiagnosisScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color(0xFF1B241C)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
 
             Column(
@@ -294,7 +300,7 @@ fun CattleDiagnosisScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         elevation = CardDefaults.cardElevation(defaultElevation = 1.5.dp)
                     ) {
                         Row(
@@ -316,13 +322,13 @@ fun CattleDiagnosisScreen(
                                     text = "${activeCattle.animalType} – ${activeCattle.tagNumber}",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color(0xFF1B241C)
+                                    color = TextPrimary
                                 )
                                 Spacer(modifier = Modifier.height(2.dp))
                                 Text(
                                     text = "${tr("उम्र", "Age", "वय", "ઉંમર", "ਉਮਰ")}: ${activeCattle.ageYears} ${tr("वर्ष", "yrs", "वर्षे", "વર્ષ", "ਸਾਲ")} • ${activeCattle.status}",
                                     fontSize = 13.sp,
-                                    color = Color(0xFF616161)
+                                    color = TextSecondary
                                 )
                             }
 
@@ -344,7 +350,7 @@ fun CattleDiagnosisScreen(
                         text = tr("लक्षण एवं समस्या दर्ज करें", "Enter Symptoms & Problem", "लक्षणे व समस्या नोंदवा", "લક્ષણો અને સમસ્યા દાખલ કરો", "ਲੱਛਣ ਅਤੇ ਸਮੱਸਿਆ ਦਰਜ ਕਰੋ"),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = TextPrimary
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
@@ -385,7 +391,7 @@ fun CattleDiagnosisScreen(
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                             border = CardDefaults.outlinedCardBorder()
                         ) {
                             Column(modifier = Modifier.padding(12.dp)) {
@@ -507,7 +513,7 @@ fun CattleDiagnosisScreen(
                                             text = "${tr("सुना गया", "Transcribed", "ऐकले", "સાંભળ્યું", "ਸੁਣਿਆ")}: \"$spokenText\"",
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.Medium,
-                                            color = Color(0xFF333333)
+                                            color = TextPrimary
                                         )
                                     }
                                 }
@@ -521,7 +527,7 @@ fun CattleDiagnosisScreen(
                         Card(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(14.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                             border = CardDefaults.outlinedCardBorder()
                         ) {
                             Column(modifier = Modifier.padding(14.dp)) {
@@ -534,7 +540,7 @@ fun CattleDiagnosisScreen(
                                         text = tr("लक्षणों का चयन करें:", "Select Observed Symptoms:", "लक्षणे निवडा:", "લક્ષણો પસંદ કરો:", "ਲੱਛਣ ਚੁਣੋ:"),
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = Color(0xFF1B241C)
+                                        color = TextPrimary
                                     )
 
                                     // View specimen illustration button
@@ -568,7 +574,7 @@ fun CattleDiagnosisScreen(
                                         Text(
                                             text = symptom,
                                             fontSize = 13.sp,
-                                            color = if (checked) GreenDark else Color(0xFF333333),
+                                            color = if (checked) GreenDark else TextPrimary,
                                             fontWeight = if (checked) FontWeight.SemiBold else FontWeight.Normal
                                         )
                                     }
@@ -613,7 +619,7 @@ fun CattleDiagnosisScreen(
                                     showPhotoOptionsDialog = false
                                     startLiveCamera()
                                 },
-                            colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5E9))
+                            colors = CardDefaults.cardColors(containerColor = GreenContainer)
                         ) {
                             Row(
                                 modifier = Modifier.padding(14.dp),
@@ -625,12 +631,13 @@ fun CattleDiagnosisScreen(
                                     Text(
                                         text = tr("लाइव कैमरा से फोटो लें", "Take Live Photo (Camera)", "थेट कॅमेरामधून फोटो काढा", "લાઇવ કેમેરાથી ફોટો લો", "ਲਾਈਵ ਕੈਮਰੇ ਨਾਲ ਫੋਟੋ ਲਵੋ"),
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = 14.sp
+                                        fontSize = 14.sp,
+                                        color = TextPrimary
                                     )
                                     Text(
                                         text = tr("पशु के मुंह या खुर की तुरंत तस्वीर लें", "Capture animal mouth/hoof right now", "जनावराचे तोंड किंवा खुराचा त्वरित फोटो काढा", "પશુના મોં અથવા ખરીનો તુરંત ફોટો લો", "ਪਸ਼ੂ ਦੇ ਮੂੰਹ ਜਾਂ ਖੁਰ ਦੀ ਤੁਰੰਤ ਤਸਵੀਰ ਲਵੋ"),
                                         fontSize = 12.sp,
-                                        color = Color(0xFF555555)
+                                        color = TextSecondary
                                     )
                                 }
                             }
@@ -655,12 +662,13 @@ fun CattleDiagnosisScreen(
                                     Text(
                                         text = tr("नैदानिक संदर्भ गाइड देखें", "View Clinical Reference Specimen", "वैद्यकीय संदर्भ मार्गदर्शक पहा", "તબીબી સંદર્ભ માર્ગદર્શિકા જુઓ", "ਕਲੀਨਿਕਲ ਹਵਾਲਾ ਗਾਈਡ ਦੇਖੋ"),
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = 14.sp
+                                        fontSize = 14.sp,
+                                        color = TextPrimary
                                     )
                                     Text(
                                         text = tr("FMD छाले और खुर घाव का मानक चित्र", "Standard clinical mouth/hoof lesions guide", "FMD फोड आणि खूर जखमांचे मानक चित्र", "FMD ચાંદા અને ખરીના ઘાનું પ્રમાણભૂત ચિત્ર", "FMD ਛਾਲੇ ਅਤੇ ਖੁਰ ਜ਼ਖ਼ਮਾਂ ਦਾ ਮਿਆਰੀ ਚਿੱਤਰ"),
                                         fontSize = 12.sp,
-                                        color = Color(0xFF555555)
+                                        color = TextSecondary
                                     )
                                 }
                             }
@@ -708,7 +716,7 @@ fun CattleDiagnosisScreen(
                                 "ਖੱਬੇ ਪਾਸੇ: ਮੂੰਹ ਵਿੱਚ ਛਾਲੇ ਅਤੇ ਲਾਰ ਡਿੱਗਣਾ। ਸੱਜੇ ਪਾਸੇ: ਖੁਰਾਂ ਵਿਚਕਾਰ ਜ਼ਖ਼ਮ ਅਤੇ ਲਾਲੀ।"
                             ),
                             fontSize = 12.sp,
-                            color = Color(0xFF424242),
+                            color = TextSecondary,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -749,12 +757,13 @@ fun CattleDiagnosisScreen(
                                     Text(
                                         text = "${cattle.animalType} – ${cattle.tagNumber}",
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = 14.sp
+                                        fontSize = 14.sp,
+                                        color = TextPrimary
                                     )
                                     Text(
                                         text = "${tr("उम्र", "Age", "वय", "ઉંમર", "ਉਮਰ")}: ${cattle.ageYears} | ${cattle.status}",
                                         fontSize = 12.sp,
-                                        color = Color.Gray
+                                        color = TextSecondary
                                     )
                                 }
                             }
@@ -790,14 +799,14 @@ private fun DiagnosisStepBar(currentStep: Int, selectedLanguage: String) {
             modifier = Modifier
                 .weight(1f)
                 .height(2.dp)
-                .background(if (currentStep >= 2) GreenDark else Color(0xFFE0E0E0))
+                .background(if (currentStep >= 2) GreenDark else BorderLight)
         )
         StepItem(number = 2, label = tr("लक्षण", "Symptoms", "लक्षणे", "લક્ષણો", "ਲੱਛਣ"), isActive = currentStep >= 2)
         Box(
             modifier = Modifier
                 .weight(1f)
                 .height(2.dp)
-                .background(if (currentStep >= 3) GreenDark else Color(0xFFE0E0E0))
+                .background(if (currentStep >= 3) GreenDark else BorderLight)
         )
         StepItem(number = 3, label = tr("परिणाम", "Result", "निकाल", "પરિણામ", "ਨਤੀਜਾ"), isActive = currentStep >= 3)
     }
@@ -810,12 +819,12 @@ private fun StepItem(number: Int, label: String, isActive: Boolean) {
             modifier = Modifier
                 .size(24.dp)
                 .clip(CircleShape)
-                .background(if (isActive) GreenDark else Color(0xFFE0E0E0)),
+                .background(if (isActive) GreenDark else BorderLight),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "$number",
-                color = if (isActive) Color.White else Color(0xFF757575),
+                color = if (isActive) Color.White else TextSecondary,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -825,7 +834,7 @@ private fun StepItem(number: Int, label: String, isActive: Boolean) {
             text = label,
             fontSize = 12.sp,
             fontWeight = if (isActive) FontWeight.Bold else FontWeight.Normal,
-            color = if (isActive) GreenDark else Color(0xFF757575)
+            color = if (isActive) GreenDark else TextSecondary
         )
     }
 }
@@ -845,9 +854,9 @@ private fun InputModeCard(
             .clickable { onClick() },
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (isActive) Color(0xFFE8F5E9) else Color(0xFFF1F8E9)
+            containerColor = if (isActive) GreenContainer else MaterialTheme.colorScheme.surface
         ),
-        border = if (isActive) CardDefaults.outlinedCardBorder().copy(width = 1.5.dp) else null,
+        border = if (isActive) CardDefaults.outlinedCardBorder().copy(width = 1.5.dp) else BorderStroke(1.dp, BorderLight),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Column(
@@ -861,13 +870,13 @@ private fun InputModeCard(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(Color.White),
+                    .background(if (isActive) MaterialTheme.colorScheme.surface else GreenContainer),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = title,
-                    tint = if (isActive) GreenDark else Color(0xFF2E7D32),
+                    tint = if (isActive) GreenDark else GreenPrimary,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -878,7 +887,7 @@ private fun InputModeCard(
                 text = title,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF1B241C),
+                color = TextPrimary,
                 textAlign = TextAlign.Center
             )
 
@@ -887,7 +896,7 @@ private fun InputModeCard(
             Text(
                 text = subtitle,
                 fontSize = 11.sp,
-                color = if (isActive) GreenDark else Color(0xFF616161),
+                color = if (isActive) GreenDark else TextSecondary,
                 textAlign = TextAlign.Center
             )
         }

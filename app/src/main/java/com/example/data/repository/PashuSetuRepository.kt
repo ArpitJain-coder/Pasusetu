@@ -20,12 +20,18 @@ class PashuSetuRepository(
     private val appointmentDao = database.appointmentDao()
     private val caseDao = database.medicalCaseDao()
     private val vaccineDao = database.vaccineDao()
+    private val alertDao = database.alertDao()
+    private val medicineDao = database.medicineDao()
+    private val userProfileDao = database.userProfileDao()
 
     val allCattle: Flow<List<Cattle>> = cattleDao.getAllCattle()
     val allAppointments: Flow<List<Appointment>> = appointmentDao.getAllAppointments()
     val allCases: Flow<List<MedicalCase>> = caseDao.getAllCases()
     val allVaccines: Flow<List<VaccineRecord>> = vaccineDao.getAllVaccineRecords()
     val dueVaccines: Flow<List<VaccineRecord>> = vaccineDao.getDueVaccines()
+    val allAlerts: Flow<List<com.example.data.model.AlertRecord>> = alertDao.getAllAlerts()
+    val allMedicines: Flow<List<com.example.data.model.MedicineRecord>> = medicineDao.getAllMedicines()
+    val userProfile: Flow<com.example.data.model.UserProfileEntity?> = userProfileDao.getUserProfile()
 
     suspend fun getCattleByTag(tag: String): Cattle? = cattleDao.getCattleByTag(tag)
     suspend fun getCaseByTag(tag: String): MedicalCase? = caseDao.getCaseByTag(tag)
@@ -34,16 +40,36 @@ class PashuSetuRepository(
     suspend fun insertCattle(cattle: Cattle): Long = cattleDao.insertCattle(cattle)
     suspend fun updateCattle(cattle: Cattle) = cattleDao.updateCattle(cattle)
     suspend fun deleteCattle(cattle: Cattle) = cattleDao.deleteCattle(cattle)
+    suspend fun deleteCattleById(id: Long) = cattleDao.deleteCattleById(id)
 
     suspend fun insertAppointment(appointment: Appointment): Long = appointmentDao.insertAppointment(appointment)
     suspend fun updateAppointment(appointment: Appointment) = appointmentDao.updateAppointment(appointment)
+    suspend fun updateAppointmentStatus(id: Long, status: String) = appointmentDao.updateAppointmentStatus(id, status)
+    suspend fun deleteAppointment(appointment: Appointment) = appointmentDao.deleteAppointment(appointment)
+    suspend fun deleteAppointmentById(id: Long) = appointmentDao.deleteAppointmentById(id)
 
     suspend fun insertCase(medicalCase: MedicalCase): Long = caseDao.insertCase(medicalCase)
     suspend fun updateCase(medicalCase: MedicalCase) = caseDao.updateCase(medicalCase)
+    suspend fun updateCaseStatus(id: Long, status: String) = caseDao.updateCaseStatus(id, status)
+    suspend fun deleteCase(medicalCase: MedicalCase) = caseDao.deleteCase(medicalCase)
 
     suspend fun insertVaccine(vaccine: VaccineRecord): Long = vaccineDao.insertVaccine(vaccine)
     suspend fun updateVaccine(vaccine: VaccineRecord) = vaccineDao.updateVaccine(vaccine)
     suspend fun updateVaccineStatus(id: Long, status: VaccineStatus) = vaccineDao.updateStatus(id, status)
+    suspend fun deleteVaccine(vaccine: VaccineRecord) = vaccineDao.deleteVaccine(vaccine)
+
+    fun getAlertsByDistrict(district: String): Flow<List<com.example.data.model.AlertRecord>> = alertDao.getAlertsByDistrict(district)
+    suspend fun insertAlert(alert: com.example.data.model.AlertRecord): Long = alertDao.insertAlert(alert)
+    suspend fun markAlertAsRead(id: Long) = alertDao.markAsRead(id)
+    suspend fun deleteAlert(alert: com.example.data.model.AlertRecord) = alertDao.deleteAlert(alert)
+
+    fun searchMedicines(query: String): Flow<List<com.example.data.model.MedicineRecord>> = medicineDao.searchMedicines(query)
+    fun getMedicinesByCategory(category: String): Flow<List<com.example.data.model.MedicineRecord>> = medicineDao.getMedicinesByCategory(category)
+    suspend fun insertMedicine(medicine: com.example.data.model.MedicineRecord): Long = medicineDao.insertMedicine(medicine)
+    suspend fun updateMedicine(medicine: com.example.data.model.MedicineRecord) = medicineDao.updateMedicine(medicine)
+
+    suspend fun getUserProfileOnce(): com.example.data.model.UserProfileEntity? = userProfileDao.getUserProfileOnce()
+    suspend fun saveUserProfile(profile: com.example.data.model.UserProfileEntity) = userProfileDao.saveUserProfile(profile)
 
     /**
      * Connects with Gemini via the Firebase AI SDK in [diagnosisRepository] to generate

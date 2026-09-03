@@ -31,6 +31,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -54,6 +55,9 @@ import com.example.data.model.MedicalCase
 import com.example.ui.components.CattleAvatar
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.GreenPrimary
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.appTextFieldColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,7 +83,7 @@ fun CaseDetailScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color(0xFFF9FAF8)
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // Top App Bar matching Screen 8
@@ -89,7 +93,7 @@ fun CaseDetailScreen(
                         text = tr("केस विवरण", "Case Details", "केस तपशील", "કેસ વિગતો", "ਕੇਸ ਦੇ ਵੇਰਵੇ"),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -97,7 +101,7 @@ fun CaseDetailScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color(0xFF1B241C)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
@@ -106,7 +110,7 @@ fun CaseDetailScreen(
                         Icon(
                             imageVector = Icons.Default.MoreVert,
                             contentDescription = "More Options",
-                            tint = Color(0xFF1B241C)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                     DropdownMenu(
@@ -126,7 +130,7 @@ fun CaseDetailScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
 
             Column(
@@ -141,7 +145,7 @@ fun CaseDetailScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(14.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                     ) {
                         Row(
@@ -163,20 +167,20 @@ fun CaseDetailScreen(
                                     text = medicalCase.cattleTag,
                                     fontSize = 17.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color(0xFF1B241C)
+                                    color = TextPrimary
                                 )
                                 Spacer(modifier = Modifier.height(2.dp))
                                 Text(
                                     text = "${medicalCase.farmerName}, ${medicalCase.village}",
                                     fontSize = 14.sp,
-                                    color = Color(0xFF616161)
+                                    color = TextSecondary
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
                                     text = "${tr("दिनांक", "Date", "तारीख", "તારીખ", "ਮਿਤੀ")}: ${medicalCase.date}",
                                     fontSize = 13.sp,
                                     fontWeight = FontWeight.Medium,
-                                    color = Color(0xFF757575)
+                                    color = TextSecondary
                                 )
                             }
                         }
@@ -246,7 +250,7 @@ fun CaseDetailScreen(
                         shape = RoundedCornerShape(12.dp),
                         contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp),
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White,
+                            containerColor = MaterialTheme.colorScheme.surface,
                             contentColor = GreenDark
                         ),
                         border = androidx.compose.foundation.BorderStroke(1.5.dp, GreenDark)
@@ -269,7 +273,7 @@ fun CaseDetailScreen(
 
             AlertDialog(
                 onDismissRequest = { showEditDialog = false },
-                title = { Text(tr("केस उपचार अपडेट करें", "Update Case Treatment", "केस उपचार अपडेट करा", "કેસ સારવાર અપડેટ કરો", "ਕੇਸ ਇਲਾਜ ਅਪਡੇਟ ਕਰੋ"), fontWeight = FontWeight.Bold) },
+                title = { Text(tr("केस उपचार अपडेट करें", "Update Case Treatment", "केस उपचार अपडेट करा", "કેસ સારવાર અપડેટ કરો", "ਕੇਸ ਇਲਾਜ ਅਪਡੇਟ ਕਰੋ"), fontWeight = FontWeight.Bold, color = TextPrimary) },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         OutlinedTextField(
@@ -277,13 +281,15 @@ fun CaseDetailScreen(
                             onValueChange = { editedTreatment = it },
                             label = { Text(tr("उपचार व दवाएं", "Treatment & Medicines", "उपचार आणि औषधे", "સારવાર અને દવાઓ", "ਇਲਾਜ ਅਤੇ ਦਵਾਈਆਂ")) },
                             modifier = Modifier.fillMaxWidth(),
-                            minLines = 3
+                            minLines = 3,
+                            colors = appTextFieldColors()
                         )
                         OutlinedTextField(
                             value = editedNextVisit,
                             onValueChange = { editedNextVisit = it },
                             label = { Text(tr("अगली विजिट की तारीख", "Next Visit Date", "पुढील भेटीची तारीख", "આગામી મુલાકાતની તારીખ", "ਅਗਲੀ ਮੁਲਾਕਾਤ ਦੀ ਮਿਤੀ")) },
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = appTextFieldColors()
                         )
                     }
                 },
@@ -295,12 +301,12 @@ fun CaseDetailScreen(
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = GreenDark)
                     ) {
-                        Text(tr("सेव करें", "Save", "जतन करा", "સાચવો", "ਸੇਵ ਕਰੋ"))
+                        Text(tr("सेव करें", "Save", "जतन करा", "સાચવો", "ਸੇਵ ਕਰੋ"), color = Color.White)
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showEditDialog = false }) {
-                        Text(tr("रद्द करें", "Cancel", "रद्द करा", "રદ કરો", "ਰੱਦ ਕਰੋ"))
+                        Text(tr("रद्द करें", "Cancel", "रद्द करा", "રદ કરો", "ਰੱਦ ਕਰੋ"), color = TextSecondary)
                     }
                 }
             )
@@ -310,7 +316,7 @@ fun CaseDetailScreen(
         if (showCallSuccessDialog) {
             AlertDialog(
                 onDismissRequest = { showCallSuccessDialog = false },
-                title = { Text(tr("किसान से संपर्क", "Contact Farmer", "शेतकऱ्याशी संपर्क", "ખેડૂત સાથે સંપર્ક", "ਕਿਸਾਨ ਨਾਲ ਸੰਪਰਕ"), fontWeight = FontWeight.Bold) },
+                title = { Text(tr("किसान से संपर्क", "Contact Farmer", "शेतकऱ्याशी संपर्क", "ખેડૂત સાથે સંપર્ક", "ਕਿਸਾਨ ਨਾਲ ਸੰਪਰਕ"), fontWeight = FontWeight.Bold, color = TextPrimary) },
                 text = {
                     Text(tr(
                         "${medicalCase.farmerName} (+91 98765 43210) को कॉल कनेक्ट किया जा रहा है...",
@@ -318,11 +324,11 @@ fun CaseDetailScreen(
                         "${medicalCase.farmerName} (+91 98765 43210) यांच्याशी कॉल जोडला जात आहे...",
                         "${medicalCase.farmerName} (+91 98765 43210) ને કોલ જોડાઈ રહ્યો છે...",
                         "${medicalCase.farmerName} (+91 98765 43210) ਨੂੰ ਕਾਲ ਮਿਲਾਈ ਜਾ ਰਹੀ ਹੈ..."
-                    ))
+                    ), color = TextSecondary)
                 },
                 confirmButton = {
                     TextButton(onClick = { showCallSuccessDialog = false }) {
-                        Text(tr("ठीक है", "OK", "ठीक आहे", "બરાબર", "ਠੀਕ ਹੈ"))
+                        Text(tr("ठीक है", "OK", "ठीक आहे", "બરાબર", "ਠੀਕ ਹੈ"), color = GreenDark)
                     }
                 }
             )
@@ -341,7 +347,7 @@ private fun CaseInfoSection(
             text = title,
             fontSize = 15.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF1B241C)
+            color = TextPrimary
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
@@ -349,7 +355,7 @@ private fun CaseInfoSection(
             fontSize = 14.sp,
             lineHeight = 20.sp,
             fontWeight = if (isBoldContent) FontWeight.SemiBold else FontWeight.Normal,
-            color = if (isBoldContent) Color(0xFF1B241C) else Color(0xFF424242)
+            color = if (isBoldContent) TextPrimary else TextSecondary
         )
     }
 }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -61,10 +63,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.components.CattleAvatar
+import com.example.ui.theme.GreenContainer
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.StatusMediumRisk
 import com.example.ui.theme.StatusMediumRiskBg
 import com.example.ui.theme.StatusSick
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
 import com.example.ui.viewmodel.DiagnosisResult
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,10 +85,12 @@ fun DiagnosisResultScreen(
     onStopSpeakingClick: () -> Unit = {},
     onBackClick: () -> Unit,
     onContactVetClick: () -> Unit,
+    onSaveCaseClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     var showMoreInfoDialog by remember { mutableStateOf(false) }
+    var caseSaved by remember { mutableStateOf(false) }
 
     fun tr(hi: String, en: String, mr: String, gu: String, pa: String): String = when (selectedLanguage) {
         "English" -> en
@@ -95,7 +102,7 @@ fun DiagnosisResultScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color(0xFFF9FAF8)
+        color = androidx.compose.material3.MaterialTheme.colorScheme.background
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // Top App Bar
@@ -105,7 +112,7 @@ fun DiagnosisResultScreen(
                         text = tr("जाँच का परिणाम", "Diagnosis Result", "तपासणीचा निकाल", "તપાસ પરિણામ", "ਜਾਂਚ ਦਾ ਨਤੀਜਾ"),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = TextPrimary
                     )
                 },
                 navigationIcon = {
@@ -113,7 +120,7 @@ fun DiagnosisResultScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color(0xFF1B241C)
+                            tint = TextPrimary
                         )
                     }
                 },
@@ -131,16 +138,22 @@ fun DiagnosisResultScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surface)
             )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 20.dp, vertical = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.TopCenter
             ) {
+                val isWide = maxWidth > 680.dp
+                Column(
+                    modifier = Modifier
+                        .widthIn(max = 700.dp)
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = if (isWide) 24.dp else 18.dp, vertical = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                 // Cattle Image / Photo with Warning Badge Overlay
                 Box(
                     modifier = Modifier
@@ -227,7 +240,7 @@ fun DiagnosisResultScreen(
                     text = tr("संभावित बीमारी", "Detected Condition", "संभाव्य आजार", "સંભવિત રોગ", "ਸੰਭਾਵੀ ਬਿਮਾਰੀ"),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF666666)
+                    color = TextSecondary
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -258,7 +271,7 @@ fun DiagnosisResultScreen(
                         Text(
                             text = "${tr("जोखिम स्तर", "Risk Level", "धोक्याची पातळी", "જોખમ સ્તર", "ਜੋਖਮ ਪੱਧਰ")}: ",
                             fontSize = 13.sp,
-                            color = Color(0xFF555555)
+                            color = TextSecondary
                         )
                         Text(
                             text = result.riskLevel,
@@ -272,7 +285,7 @@ fun DiagnosisResultScreen(
 
                     Surface(
                         shape = RoundedCornerShape(20.dp),
-                        color = if (isSpeaking) Color(0xFFFFEBEE) else Color(0xFFE8F5E9),
+                        color = if (isSpeaking) Color(0xFFFFEBEE) else GreenContainer,
                         modifier = Modifier.clickable {
                             if (isSpeaking) onStopSpeakingClick() else onSpeakClick()
                         }
@@ -352,7 +365,7 @@ fun DiagnosisResultScreen(
                                     "ਲਾਗ ਫੈਲਣ ਦਾ ਖ਼ਤਰਾ ਵੱਧ ਹੈ। ਵਾੜੇ ਨੂੰ ਚੂਨੇ ਨਾਲ ਕੀਟਾਣੂ-ਰਹਿਤ ਕਰੋ।"
                                 ),
                                 fontSize = 12.sp,
-                                color = Color(0xFF555555)
+                                color = TextSecondary
                             )
                         }
                     }
@@ -364,7 +377,7 @@ fun DiagnosisResultScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surface),
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.5.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -372,7 +385,7 @@ fun DiagnosisResultScreen(
                             text = tr("प्राथमिक सावधानियां एवं देखभाल", "Primary Precautions & Care", "प्राथमिक खबरदारी आणि काळजी", "પ્રાથમિક સાવચેતી અને સંભાળ", "ਮੁੱਢਲੀਆਂ ਸਾਵਧਾਨੀਆਂ ਅਤੇ ਦੇਖਭਾਲ"),
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1B241C)
+                            color = TextPrimary
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -388,7 +401,7 @@ fun DiagnosisResultScreen(
                                     modifier = Modifier
                                         .size(20.dp)
                                         .clip(CircleShape)
-                                        .background(Color(0xFFE8F5E9)),
+                                        .background(GreenContainer),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Icon(
@@ -402,7 +415,7 @@ fun DiagnosisResultScreen(
                                 Text(
                                     text = precaution,
                                     fontSize = 13.sp,
-                                    color = Color(0xFF333333),
+                                    color = TextPrimary,
                                     lineHeight = 18.sp
                                 )
                             }
@@ -416,7 +429,7 @@ fun DiagnosisResultScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(14.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surface),
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.5.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -424,7 +437,7 @@ fun DiagnosisResultScreen(
                             text = tr("अनुशंसित प्राथमिक दवाइयां", "Recommended Supportive Medicines", "शिफारस केलेली प्राथमिक औषधे", "ભલામણ કરેલ પ્રાથમિક દવાઓ", "ਸਿਫ਼ਾਰਸ਼ ਕੀਤੀਆਂ ਮੁੱਢਲੀਆਂ ਦਵਾਈਆਂ"),
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1B241C)
+                            color = TextPrimary
                         )
 
                         Spacer(modifier = Modifier.height(10.dp))
@@ -432,7 +445,7 @@ fun DiagnosisResultScreen(
                         result.recommendedMedicines.forEach { medicine ->
                             Surface(
                                 shape = RoundedCornerShape(8.dp),
-                                color = Color(0xFFF1F8E9),
+                                color = GreenContainer,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 4.dp)
@@ -491,7 +504,46 @@ fun DiagnosisResultScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+
+                if (onSaveCaseClick != null) {
+                    OutlinedButton(
+                        onClick = {
+                            onSaveCaseClick()
+                            caseSaved = true
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = if (caseSaved) Color(0xFFE8F5E9) else Color.Transparent,
+                            contentColor = GreenDark
+                        ),
+                        border = androidx.compose.foundation.BorderStroke(
+                            1.5.dp,
+                            if (caseSaved) GreenDark else Color(0xFF2E7D32)
+                        )
+                    ) {
+                        Icon(
+                            imageVector = if (caseSaved) Icons.Default.Check else Icons.Default.Warning,
+                            contentDescription = null,
+                            tint = GreenDark,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = if (caseSaved) {
+                                tr("✓ मेडिकल केस डेटाबेस में सुरक्षित किया गया", "✓ Saved to Database & Medical Records", "✓ डेटाबेसमध्ये सुरक्षित केले", "✓ ડેટાબેઝમાં સાચવવામાં આવ્યું", "✓ ਡੇਟਾਬੇਸ ਵਿੱਚ ਸੁਰੱਖਿਅਤ ਕੀਤਾ ਗਿਆ")
+                            } else {
+                                tr("💾 मेडिकल केस व रिकॉर्ड में सेव करें", "💾 Save Case to Health Records", "💾 वैद्यकीय केस नोंदवा", "💾 મેડિકલ કેસમાં સાચવો", "💾 ਮੈਡੀਕਲ ਰਿਕਾਰਡ ਵਿੱਚ ਸੇਵ ਕਰੋ")
+                            },
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
 
                 // More Information Text Button
                 TextButton(onClick = { showMoreInfoDialog = true }) {
@@ -502,6 +554,7 @@ fun DiagnosisResultScreen(
                         fontWeight = FontWeight.SemiBold
                     )
                 }
+            }
             }
         }
 

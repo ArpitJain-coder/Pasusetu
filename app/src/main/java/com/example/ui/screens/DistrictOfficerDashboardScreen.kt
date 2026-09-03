@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -57,10 +59,13 @@ import androidx.compose.ui.unit.sp
 import com.example.data.model.DistrictSummary
 import com.example.ui.components.DistrictHealthMap
 import com.example.ui.components.RealMapView
+import com.example.ui.theme.GreenContainer
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.GreenPrimary
 import com.example.ui.theme.StatusHealthy
 import com.example.ui.theme.StatusSick
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
 
 import com.example.ui.util.AppStrings
 
@@ -96,7 +101,7 @@ fun DistrictOfficerDashboardScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color(0xFFF9FAF8)
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // Top App Bar matching Screen 9
@@ -106,7 +111,7 @@ fun DistrictOfficerDashboardScreen(
                         text = tr("जिला पशु चिकित्सा डैशबोर्ड", "District Animal Health Dashboard", "जिल्हा पशू आरोग्य डॅशबोर्ड", "જિલ્લા પશુ આરોગ્ય ડેશબોર્ડ", "ਜ਼ਿਲ੍ਹਾ ਪਸ਼ੂ ਸਿਹਤ ਡੈਸ਼ਬੋਰਡ"),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -114,7 +119,7 @@ fun DistrictOfficerDashboardScreen(
                         Icon(
                             imageVector = Icons.Default.Menu,
                             contentDescription = "Menu",
-                            tint = Color(0xFF1B241C)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
@@ -123,7 +128,7 @@ fun DistrictOfficerDashboardScreen(
                     Box {
                         Surface(
                             shape = RoundedCornerShape(16.dp),
-                            color = Color(0xFFE8F5E9),
+                            color = GreenContainer,
                             border = androidx.compose.foundation.BorderStroke(1.dp, GreenPrimary.copy(alpha = 0.5f)),
                             modifier = Modifier
                                 .clickable { langMenuExpanded = true }
@@ -159,7 +164,7 @@ fun DistrictOfficerDashboardScreen(
                                         Text(
                                             text = lang,
                                             fontWeight = if (lang == selectedLanguage) FontWeight.Bold else FontWeight.Normal,
-                                            color = if (lang == selectedLanguage) GreenDark else Color.Black
+                                            color = if (lang == selectedLanguage) GreenDark else TextPrimary
                                         )
                                     },
                                     onClick = {
@@ -175,18 +180,24 @@ fun DistrictOfficerDashboardScreen(
                         Icon(
                             imageVector = Icons.Default.NotificationsNone,
                             contentDescription = "Notifications",
-                            tint = Color(0xFF1B241C)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.TopCenter
             ) {
+                val isWide = maxWidth > 680.dp
+                LazyColumn(
+                    modifier = Modifier
+                        .widthIn(max = 720.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = if (isWide) 24.dp else 16.dp, vertical = 12.dp)
+                ) {
                 // Officer Profile Header
                 item {
                     Row(
@@ -201,12 +212,12 @@ fun DistrictOfficerDashboardScreen(
                                 text = tr("नमस्ते अधिकारी महोदय 👋", "Hello Officer 👋", "नमस्कार अधिकारी महोदय 👋", "નમસ્તે અધિકારી સાહેબ 👋", "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਅਧਿਕਾਰੀ ਸਾਹਿਬ 👋"),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF1B241C)
+                                color = TextPrimary
                             )
                             Text(
                                 text = tr("पशुपालन एवं डेयरी विकास विभाग • जयपुर मंडल", "Animal Husbandry & Dairy Dept • Jaipur Div", "पशूसंवर्धन विभाग • जयपूर विभाग", "પશુપાલન વિભાગ • જયપુર", "ਪਸ਼ੂ ਪਾਲਣ ਵਿਭਾਗ • ਜੈਪੁਰ ਮੰਡਲ"),
                                 fontSize = 12.sp,
-                                color = Color(0xFF616161)
+                                color = TextSecondary
                             )
                         }
                         androidx.compose.foundation.Image(
@@ -273,7 +284,7 @@ fun DistrictOfficerDashboardScreen(
                             text = tr("रोग प्रकोप मैपिंग व विश्लेषण", "Disease Outbreak Map & Spread", "रोग प्रादुर्भाव मॅपिंग व विश्लेषण", "રોગ ફેલાવો મેપિંગ અને વિશ્લેષણ", "ਰੋਗ ਫੈਲਾਅ ਮੈਪਿੰਗ ਅਤੇ ਵਿਸ਼ਲੇਸ਼ਣ"),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1B241C)
+                            color = TextPrimary
                         )
                     }
 
@@ -282,7 +293,7 @@ fun DistrictOfficerDashboardScreen(
                     // Map View Mode Tabs
                     TabRow(
                         selectedTabIndex = selectedMapTab,
-                        containerColor = Color(0xFFE8F5E9),
+                        containerColor = GreenContainer,
                         contentColor = GreenDark,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -386,7 +397,7 @@ fun DistrictOfficerDashboardScreen(
                                     Text(
                                         text = tr("32 पुष्ट मामले • त्वरित टीकाकरण दल आवश्यक", "32 confirmed cases • Rapid vaccine unit needed", "३२ पुष्टी झालेली प्रकरणे • तातडीचे लसीकरण पथक आवश्यक", "32 પુષ્ટિ કેસ • તાત્કાલિક રસીકરણ ટીમ જરૂરી", "32 ਪੁਸ਼ਟੀ ਕੀਤੇ ਕੇਸ • ਤੁਰੰਤ ਟੀਕਾਕਰਨ ਟੀਮ ਲੋੜੀਂਦੀ"),
                                         fontSize = 11.sp,
-                                        color = Color(0xFF555555)
+                                        color = TextSecondary
                                     )
                                 }
                             }
@@ -399,7 +410,7 @@ fun DistrictOfficerDashboardScreen(
                                 colors = ButtonDefaults.buttonColors(containerColor = StatusSick),
                                 contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 6.dp)
                             ) {
-                                Text(tr("दल भेजें", "Dispatch", "पथक पाठवा", "ટીમ મોકલો", "ਟੀਮ ਭੇਜੋ"), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                Text(tr("दल भेजें", "Dispatch", "पथक पाठवा", "ટીમ મોકલો", "ਟੀਮ ਭੇਜੋ"), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color.White)
                             }
                         }
                     }
@@ -412,7 +423,7 @@ fun DistrictOfficerDashboardScreen(
                         text = "${tr("सारांश", "Summary", "सारांश", "સારાંશ", "ਸਾਰਾਂਸ਼")} (${summary.district})",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = TextPrimary
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -434,7 +445,7 @@ fun DistrictOfficerDashboardScreen(
                             count = "${((summary.vaccinatedAnimals.toDouble() / (summary.totalAnimals.coerceAtLeast(1))) * 100).toInt()}%",
                             label = tr("टीकाकरण कवरेज", "Vaccination %", "लसीकरण कव्हरेज", "રસીકરણ કવરેજ", "ਟੀਕਾਕਰਨ ਕਵਰੇਜ"),
                             countColor = StatusHealthy,
-                            bgColor = Color(0xFFE8F5E9),
+                            bgColor = GreenContainer,
                             modifier = Modifier.weight(1f)
                         )
                         OfficerStatCard(
@@ -454,7 +465,7 @@ fun DistrictOfficerDashboardScreen(
                         text = tr("सक्रिय निगरानी क्षेत्र", "Active Containment Zones", "सक्रिय नियंत्रण क्षेत्रे", "સક્રિય દેખરેખ વિસ્તારો", "ਐਕਟਿਵ ਕੰਟੇਨਮੈਂਟ ਜ਼ੋਨ"),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = TextPrimary
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -464,7 +475,7 @@ fun DistrictOfficerDashboardScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
                         Column(modifier = Modifier.padding(14.dp)) {
                             ZoneRowItem(
@@ -490,6 +501,7 @@ fun DistrictOfficerDashboardScreen(
                     Spacer(modifier = Modifier.height(24.dp))
                 }
             }
+            }
         }
 
         // Dispatch Team Dialog
@@ -499,7 +511,8 @@ fun DistrictOfficerDashboardScreen(
                 title = {
                     Text(
                         text = tr("त्वरित सहायता दल रवाना करें", "Dispatch Rapid Response Team", "तातडीचे मदत पथक रवाना करा", "તાત્કાલિક સહાય ટીમ રવાના કરો", "ਤੁਰੰਤ ਸਹਾਇਤਾ ਟੀਮ ਰਵਾਨਾ ਕਰੋ"),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = TextPrimary
                     )
                 },
                 text = {
@@ -507,7 +520,8 @@ fun DistrictOfficerDashboardScreen(
                         Text(
                             text = "${tr("क्षेत्र", "Target Zone", "भाग", "વિસ્તાર", "ਖੇਤਰ")}: ${dispatchedZone ?: tr("चयनित ब्लॉक", "Selected Block", "निवडलेला ब्लॉक", "પસંદ કરેલ બ્લોક", "ਚੁਣਿਆ ਗਿਆ ਬਲਾਕ")}",
                             fontWeight = FontWeight.SemiBold,
-                            fontSize = 14.sp
+                            fontSize = 14.sp,
+                            color = TextPrimary
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
@@ -519,7 +533,7 @@ fun DistrictOfficerDashboardScreen(
                                 "ਕੀ ਤੁਸੀਂ ਇਸ ਖੇਤਰ ਵਿੱਚ ਵੈਟਰਨਰੀ ਟੀਮ, ਮੋਬਾਈਲ ਐਂਬੂਲੈਂਸ ਅਤੇ 200 ਵੈਕਸੀਨ ਡੋਜ਼ ਭੇਜਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
                             ),
                             fontSize = 13.sp,
-                            color = Color(0xFF555555)
+                            color = TextSecondary
                         )
                     }
                 },
@@ -531,12 +545,12 @@ fun DistrictOfficerDashboardScreen(
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = StatusSick)
                     ) {
-                        Text(tr("हाँ, रवाना करें", "Confirm Dispatch", "होय, रवाना करा", "હા, રવાના કરો", "ਹਾਂ, ਰਵਾਨਾ ਕਰੋ"), fontWeight = FontWeight.Bold)
+                        Text(tr("हाँ, रवाना करें", "Confirm Dispatch", "होय, रवाना करा", "હા, રવાના કરો", "ਹਾਂ, ਰਵਾਨਾ ਕਰੋ"), fontWeight = FontWeight.Bold, color = Color.White)
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { showDispatchDialog = false }) {
-                        Text(tr("रद्द करें", "Cancel", "रद्द करा", "રદ કરો", "ਰੱਦ ਕਰੋ"))
+                        Text(tr("रद्द करें", "Cancel", "रद्द करा", "રદ કરો", "ਰੱਦ ਕਰੋ"), color = TextSecondary)
                     }
                 }
             )
@@ -562,7 +576,8 @@ fun DistrictOfficerDashboardScreen(
                             "તાત્કાલિક સહાય ટીમ ${dispatchedZone ?: ""} માટે રવાના થઈ ચૂકી છે. સંબંધિત સરપંચને SMS મોકલી દેવાયો છે.",
                             "ਤੁਰੰਤ ਸਹਾਇਤਾ ਟੀਮ ${dispatchedZone ?: ""} ਲਈ ਰਵਾਨਾ ਹੋ ਚੁੱਕੀ ਹੈ। ਸੰਬੰਧਿਤ ਸਰਪੰਚ ਨੂੰ SMS ਸੂਚਨਾ ਭੇਜ ਦਿੱਤੀ ਗਈ ਹੈ।"
                         ),
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
+                        color = TextPrimary
                     )
                 },
                 confirmButton = {
@@ -570,7 +585,7 @@ fun DistrictOfficerDashboardScreen(
                         onClick = { showSuccessToast = false },
                         colors = ButtonDefaults.buttonColors(containerColor = GreenDark)
                     ) {
-                        Text(tr("ठीक है", "OK", "ठीक आहे", "બરાબર", "ਠੀਕ ਹੈ"))
+                        Text(tr("ठीक है", "OK", "ठीक आहे", "બરાબર", "ਠੀਕ ਹੈ"), color = Color.White)
                     }
                 }
             )
@@ -586,7 +601,7 @@ private fun FilterPill(
 ) {
     Surface(
         shape = RoundedCornerShape(8.dp),
-        color = Color.White,
+        color = MaterialTheme.colorScheme.surface,
         border = CardDefaults.outlinedCardBorder(),
         modifier = modifier.clickable { onClick() }
     ) {
@@ -599,13 +614,13 @@ private fun FilterPill(
                 text = text,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color(0xFF333333)
+                color = TextPrimary
             )
             Spacer(modifier = Modifier.width(4.dp))
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
                 contentDescription = null,
-                tint = Color(0xFF666666),
+                tint = TextSecondary,
                 modifier = Modifier.size(18.dp)
             )
         }
@@ -642,7 +657,7 @@ private fun OfficerStatCard(
             Text(
                 text = label,
                 fontSize = 11.sp,
-                color = Color(0xFF424242),
+                color = TextSecondary,
                 fontWeight = FontWeight.Medium
             )
         }
@@ -659,8 +674,8 @@ private fun ZoneRowItem(name: String, cases: String, status: String, statusColor
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
-            Text(text = name, fontWeight = FontWeight.Bold, fontSize = 13.sp)
-            Text(text = cases, fontSize = 11.sp, color = Color.Gray)
+            Text(text = name, fontWeight = FontWeight.Bold, fontSize = 13.sp, color = TextPrimary)
+            Text(text = cases, fontSize = 11.sp, color = TextSecondary)
         }
         Surface(
             shape = RoundedCornerShape(6.dp),

@@ -79,6 +79,12 @@ class PashuSetuViewModel(application: Application) : AndroidViewModel(applicatio
     val dueVaccinesList: StateFlow<List<VaccineRecord>> = repository.dueVaccines
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    val alertList: StateFlow<List<com.example.data.model.AlertRecord>> = repository.allAlerts
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    val medicineList: StateFlow<List<com.example.data.model.MedicineRecord>> = repository.allMedicines
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     // Role state
     private val _currentRole = MutableStateFlow(UserRole.FARMER)
     val currentRole: StateFlow<UserRole> = _currentRole.asStateFlow()
@@ -438,6 +444,110 @@ class PashuSetuViewModel(application: Application) : AndroidViewModel(applicatio
                     alertMessageEnglish = "New vaccine scheduled: $englishName"
                 )
             )
+        }
+    }
+
+    fun saveDiagnosisAsMedicalCase(
+        cattleTag: String = _selectedCattleForDiagnosis.value?.tagNumber ?: "G001",
+        animalType: String = _selectedCattleForDiagnosis.value?.animalType ?: "गाय",
+        farmerName: String = _userProfile.value.name,
+        village: String = _userProfile.value.address
+    ) {
+        val result = _diagnosisResult.value
+        viewModelScope.launch {
+            repository.insertCase(
+                MedicalCase(
+                    cattleTag = cattleTag,
+                    animalType = animalType,
+                    farmerName = farmerName,
+                    village = village,
+                    date = "आज",
+                    symptoms = _selectedSymptoms.value.joinToString(", ").ifBlank { "सामान्य लक्षण" },
+                    diagnosis = "${result.diseaseName} (${result.englishName})",
+                    treatment = result.recommendedMedicines.joinToString("\n") { "• $it" },
+                    nextVisit = "3 दिन बाद",
+                    riskLevel = result.riskLevel,
+                    status = "उपचाराधीन"
+                )
+            )
+            // Also update cattle in DB
+            _selectedCattleForDiagnosis.value?.let { cattle ->
+                repository.updateCattle(cattle.copy(status = "बीमार", notes = result.diseaseName))
+            }
+        }
+    }
+
+    fun updateAppointmentStatus(appointmentId: Long, newStatus: String) {
+        viewModelScope.launch {
+            repository.updateAppointmentStatus(appointmentId, newStatus)
+        }
+    }
+
+    fun cancelAppointment(appointment: Appointment) {
+        viewModelScope.launch {
+            repository.deleteAppointment(appointment)
+        }
+    }
+
+    fun deleteCattle(cattle: Cattle) {
+        viewModelScope.launch {
+            repository.deleteCattle(cattle)
+        }
+    }
+
+    fun updateCattleStatus(cattle: Cattle, newStatus: String) {
+        viewModelScope.launch {
+            repository.updateCattle(cattle.copy(status = newStatus))
+        }
+    }
+
+    fun resolveMedicalCase(caseId: Long) {
+        viewModelScope.launch {
+            repository.updateCaseStatus(caseId, "ठीक हुआ")
+        }
+    }
+
+    fun broadcastAlert(
+        title: String,
+        englishTitle: String,
+        description: String,
+        englishDescription: String,
+        isUrgent: Boolean = false,
+        district: String = _selectedDistrict.value
+    ) {
+        viewModelScope.launch {
+            repository.insertAlert(
+                com.example.data.model.AlertRecord(
+                    title = title,
+                    englishTitle = englishTitle,
+                    description = description,
+                    englishDescription = englishDescription,
+                    timestamp = "अभी-अभी",
+                    isUrgent = isUrgent,
+                    source = "पशुपालन विभाग (जिला नियंत्रण कक्ष)",
+                    district = district
+                )
+            )
+        }
+    }
+
+    fun markAlertRead(alertId: Long) {
+        viewModelScope.launch {
+            repository.markAlertAsRead(alertId)
+        }
+    }
+
+    fun markAlertAsRead(alertId: Long) = markAlertRead(alertId)
+
+    fun deleteAlert(alert: com.example.data.model.AlertRecord) {
+        viewModelScope.launch {
+            repository.deleteAlert(alert)
+        }
+    }
+
+    fun deleteVaccine(vaccine: VaccineRecord) {
+        viewModelScope.launch {
+            repository.deleteVaccine(vaccine)
         }
     }
 }

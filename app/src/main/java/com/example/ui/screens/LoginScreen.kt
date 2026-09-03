@@ -83,13 +83,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.UserRole
+import androidx.compose.material3.MaterialTheme
 import com.example.ui.theme.BlueVet
 import com.example.ui.theme.BlueVetContainer
+import com.example.ui.theme.BorderLight
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.GreenPrimary
 import com.example.ui.theme.PurpleOfficer
 import com.example.ui.theme.PurpleOfficerContainer
 import com.example.ui.theme.StatusHealthy
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.TextTertiary
+import com.example.ui.theme.appTextFieldColors
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -160,7 +166,7 @@ fun LoginScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color(0xFFF9FAF8)
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // App Bar
@@ -170,7 +176,7 @@ fun LoginScreen(
                         text = tr("पोर्टल लॉगिन", "Portal Login", "पोर्टल लॉगिन", "પોર્ટલ લૉગિન", "ਪੋਰਟਲ ਲਾਗਇਨ"),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
-                        color = Color(0xFF1B241C)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -178,7 +184,7 @@ fun LoginScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color(0xFF1B241C)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
@@ -221,7 +227,7 @@ fun LoginScreen(
                                         Text(
                                             text = lang,
                                             fontWeight = if (lang == selectedLanguage) FontWeight.Bold else FontWeight.Normal,
-                                            color = if (lang == selectedLanguage) GreenDark else Color.Black
+                                            color = if (lang == selectedLanguage) GreenDark else TextPrimary
                                         )
                                     },
                                     onClick = {
@@ -233,7 +239,7 @@ fun LoginScreen(
                         }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
 
             Column(
@@ -245,8 +251,8 @@ fun LoginScreen(
                 // Role Selector Segmented Tabs
                 Surface(
                     shape = RoundedCornerShape(12.dp),
-                    color = Color.White,
-                    border = BorderStroke(1.dp, Color(0xFFE0E0E0)),
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, BorderLight),
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
@@ -300,7 +306,7 @@ fun LoginScreen(
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(16.dp),
-                                colors = CardDefaults.cardColors(containerColor = Color.White),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                             ) {
                                 Column(
@@ -323,7 +329,7 @@ fun LoginScreen(
                                             Text(
                                                 text = tr("मोबाइल नंबर, OTP एवं पते के विवरण से प्रवेश करें", "Sign in with mobile number, OTP and village address", "मोबाईल क्रमांक, OTP आणि पत्त्याच्या तपशिलासह प्रवेश करा", "મોબાઇલ નંબર, OTP અને સરનામાની વિગતો સાથે પ્રવેશ કરો", "ਮੋਬਾਈਲ ਨੰਬਰ, OTP ਅਤੇ ਪਤੇ ਦੇ ਵੇਰਵਿਆਂ ਨਾਲ ਦਾਖਲ ਹੋਵੋ"),
                                                 fontSize = 12.sp,
-                                                color = Color(0xFF666666)
+                                                color = TextSecondary
                                             )
                                         }
 
@@ -375,7 +381,7 @@ fun LoginScreen(
                                             text = tr("मोबाइल नंबर *", "Mobile Number *", "मोबाईल क्रमांक *", "મોબાઇલ નંબર *", "ਮੋਬਾਈਲ ਨੰਬਰ *"),
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.SemiBold,
-                                            color = Color(0xFF333333)
+                                            color = TextPrimary
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                         OutlinedTextField(
@@ -391,7 +397,7 @@ fun LoginScreen(
                                                 ) {
                                                     Icon(Icons.Default.Phone, contentDescription = null, tint = GreenDark, modifier = Modifier.size(18.dp))
                                                     Spacer(modifier = Modifier.width(4.dp))
-                                                    Text("+91", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color(0xFF333333))
+                                                    Text("+91", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = TextPrimary)
                                                 }
                                             },
                                             trailingIcon = {
@@ -430,10 +436,7 @@ fun LoginScreen(
                                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone, imeAction = ImeAction.Next),
                                             shape = RoundedCornerShape(10.dp),
                                             singleLine = true,
-                                            colors = OutlinedTextFieldDefaults.colors(
-                                                focusedBorderColor = GreenDark,
-                                                unfocusedBorderColor = Color(0xFFCCCCCC)
-                                            )
+                                            colors = appTextFieldColors(focusedBorder = GreenDark)
                                         )
                                     }
 
@@ -463,7 +466,7 @@ fun LoginScreen(
                                                 Text(
                                                     text = tr("मान्य: ${otpCooldown}s", "Expires: ${otpCooldown}s", "वैध: ${otpCooldown}s", "માન્ય: ${otpCooldown}s", "ਮਿਆਦ: ${otpCooldown}s"),
                                                     fontSize = 11.sp,
-                                                    color = Color(0xFF666666)
+                                                    color = TextSecondary
                                                 )
                                             }
 
@@ -483,7 +486,7 @@ fun LoginScreen(
                                                         modifier = Modifier
                                                             .clickable { farmerOtp = "1962" }
                                                             .padding(end = 8.dp)
-                                                    ) {
+                                                     ) {
                                                         Text(
                                                             text = tr("ऑटो-फिल 1962", "Auto-fill 1962", "ऑटो-फिल 1962", "ઓટો-ફિલ 1962", "ਆਟੋ-ਫਿਲ 1962"),
                                                             fontSize = 11.sp,
@@ -497,12 +500,7 @@ fun LoginScreen(
                                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                                                 shape = RoundedCornerShape(8.dp),
                                                 singleLine = true,
-                                                colors = OutlinedTextFieldDefaults.colors(
-                                                    focusedBorderColor = GreenDark,
-                                                    unfocusedBorderColor = Color(0xFFB0BEC5),
-                                                    focusedContainerColor = Color.White,
-                                                    unfocusedContainerColor = Color.White
-                                                )
+                                                colors = appTextFieldColors(focusedBorder = GreenDark)
                                             )
                                         }
                                     }
@@ -513,7 +511,7 @@ fun LoginScreen(
                                             text = tr("किसान का पूरा नाम *", "Farmer's Full Name *", "शेतकऱ्याचे पूर्ण नाव *", "ખેડૂતનું પૂરું નામ *", "ਕਿਸਾਨ ਦਾ ਪੂਰਾ ਨਾਮ *"),
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.SemiBold,
-                                            color = Color(0xFF333333)
+                                            color = TextPrimary
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                         OutlinedTextField(
@@ -526,10 +524,7 @@ fun LoginScreen(
                                             placeholder = { Text(tr("जैसे: राम किसान / रमेश यादव", "e.g. Ramesh Kumar", "उदा. राम शेतकरी", "દા.ત. રમેશ પટેલ", "ਜਿਵੇਂ: ਰਾਮ ਸਿੰਘ")) },
                                             shape = RoundedCornerShape(10.dp),
                                             singleLine = true,
-                                            colors = OutlinedTextFieldDefaults.colors(
-                                                focusedBorderColor = GreenDark,
-                                                unfocusedBorderColor = Color(0xFFCCCCCC)
-                                            )
+                                            colors = appTextFieldColors(focusedBorder = GreenDark)
                                         )
                                     }
 
@@ -539,7 +534,7 @@ fun LoginScreen(
                                             text = tr("गाँव / ढाणी / पता (Address) *", "Village / Street Address *", "गाव / पत्ता *", "ગામ / સરનામું *", "ਪਿੰਡ / ਪਤਾ *"),
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.SemiBold,
-                                            color = Color(0xFF333333)
+                                            color = TextPrimary
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                         OutlinedTextField(
@@ -552,10 +547,7 @@ fun LoginScreen(
                                             placeholder = { Text(tr("गाँव भाटी, शाहपुरा, कोटपूतली", "Village & Postal Address", "गाव आणि पत्ता", "ગામ અને સરનામું", "ਪਿੰਡ ਅਤੇ ਪਤਾ")) },
                                             shape = RoundedCornerShape(10.dp),
                                             singleLine = true,
-                                            colors = OutlinedTextFieldDefaults.colors(
-                                                focusedBorderColor = GreenDark,
-                                                unfocusedBorderColor = Color(0xFFCCCCCC)
-                                            )
+                                            colors = appTextFieldColors(focusedBorder = GreenDark)
                                         )
                                     }
 
@@ -570,14 +562,14 @@ fun LoginScreen(
                                                 text = tr("जिला *", "District *", "जिल्हा *", "જિલ્લો *", "ਜ਼ਿਲ੍ਹਾ *"),
                                                 fontSize = 13.sp,
                                                 fontWeight = FontWeight.SemiBold,
-                                                color = Color(0xFF333333)
+                                                color = TextPrimary
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
                                             Box {
                                                 Surface(
                                                     shape = RoundedCornerShape(10.dp),
-                                                    border = BorderStroke(1.dp, Color(0xFFCCCCCC)),
-                                                    color = Color.White,
+                                                    border = BorderStroke(1.dp, BorderLight),
+                                                    color = MaterialTheme.colorScheme.surface,
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .height(54.dp)
@@ -593,9 +585,9 @@ fun LoginScreen(
                                                         Row(verticalAlignment = Alignment.CenterVertically) {
                                                             Icon(Icons.Default.LocationCity, contentDescription = null, tint = GreenDark, modifier = Modifier.size(18.dp))
                                                             Spacer(modifier = Modifier.width(6.dp))
-                                                            Text(farmerDistrict, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                                                            Text(farmerDistrict, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
                                                         }
-                                                        Icon(Icons.Default.ArrowDropDown, contentDescription = null, tint = Color(0xFF666666))
+                                                        Icon(Icons.Default.ArrowDropDown, contentDescription = null, tint = TextSecondary)
                                                     }
                                                 }
 
@@ -605,7 +597,7 @@ fun LoginScreen(
                                                 ) {
                                                     districts.forEach { dist ->
                                                         DropdownMenuItem(
-                                                            text = { Text(dist) },
+                                                            text = { Text(dist, color = TextPrimary) },
                                                             onClick = {
                                                                 farmerDistrict = dist
                                                                 districtMenuExpanded = false
@@ -622,7 +614,7 @@ fun LoginScreen(
                                                 text = tr("पिन कोड", "Pincode", "पिन कोड", "પિન કોડ", "ਪਿੰਨ ਕੋਡ"),
                                                 fontSize = 13.sp,
                                                 fontWeight = FontWeight.SemiBold,
-                                                color = Color(0xFF333333)
+                                                color = TextPrimary
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
                                             OutlinedTextField(
@@ -637,10 +629,7 @@ fun LoginScreen(
                                                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                                                 shape = RoundedCornerShape(10.dp),
                                                 singleLine = true,
-                                                colors = OutlinedTextFieldDefaults.colors(
-                                                    focusedBorderColor = GreenDark,
-                                                    unfocusedBorderColor = Color(0xFFCCCCCC)
-                                                )
+                                                colors = appTextFieldColors(focusedBorder = GreenDark)
                                             )
                                         }
                                     }
@@ -713,13 +702,13 @@ fun LoginScreen(
                         }
 
                         // ==========================================
-                        // 2. VET DOCTOR LOGIN: Email + Password
+                        // 2. VET LOGIN: Email + Password + Reg No.
                         // ==========================================
                         UserRole.VET -> {
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(16.dp),
-                                colors = CardDefaults.cardColors(containerColor = Color.White),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                             ) {
                                 Column(
@@ -742,7 +731,7 @@ fun LoginScreen(
                                             Text(
                                                 text = tr("पंजीकृत ईमेल व पासवर्ड से क्लिनिकल पोर्टल खोलें", "Sign in with institutional email & password", "नोंदणीकृत ईमेल व पासवर्डने क्लिनिकल पोर्टल उघडा", "નોંધાયેલ ઇમેઇલ અને પાસવર્ડ વડે ક્લિનિકલ પોર્ટલ ખોલો", "ਰਜਿਸਟਰਡ ਈਮੇਲ ਅਤੇ ਪਾਸਵਰਡ ਨਾਲ ਕਲੀਨਿਕਲ ਪੋਰਟਲ ਖੋਲ੍ਹੋ"),
                                                 fontSize = 12.sp,
-                                                color = Color(0xFF666666)
+                                                color = TextSecondary
                                             )
                                         }
 
@@ -790,7 +779,7 @@ fun LoginScreen(
                                             text = tr("चिकित्सक ईमेल (Veterinary Email) *", "Doctor's Email *", "डॉक्टर ईमेल *", "ડૉક્ટર ઇમેઇલ *", "ਡਾਕਟਰ ਈਮੇਲ *"),
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.SemiBold,
-                                            color = Color(0xFF333333)
+                                            color = TextPrimary
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                         OutlinedTextField(
@@ -804,10 +793,7 @@ fun LoginScreen(
                                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                                             shape = RoundedCornerShape(10.dp),
                                             singleLine = true,
-                                            colors = OutlinedTextFieldDefaults.colors(
-                                                focusedBorderColor = BlueVet,
-                                                unfocusedBorderColor = Color(0xFFCCCCCC)
-                                            )
+                                            colors = appTextFieldColors(focusedBorder = BlueVet)
                                         )
                                     }
 
@@ -817,7 +803,7 @@ fun LoginScreen(
                                             text = tr("पासवर्ड (Password) *", "Password *", "पासवर्ड *", "પાસવર્ડ *", "ਪਾਸਵਰਡ *"),
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.SemiBold,
-                                            color = Color(0xFF333333)
+                                            color = TextPrimary
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                         OutlinedTextField(
@@ -832,7 +818,7 @@ fun LoginScreen(
                                                     Icon(
                                                         imageVector = if (vetPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                                                         contentDescription = "Toggle password visibility",
-                                                        tint = Color(0xFF666666)
+                                                        tint = TextSecondary
                                                     )
                                                 }
                                             },
@@ -841,10 +827,7 @@ fun LoginScreen(
                                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
                                             shape = RoundedCornerShape(10.dp),
                                             singleLine = true,
-                                            colors = OutlinedTextFieldDefaults.colors(
-                                                focusedBorderColor = BlueVet,
-                                                unfocusedBorderColor = Color(0xFFCCCCCC)
-                                            )
+                                            colors = appTextFieldColors(focusedBorder = BlueVet)
                                         )
                                     }
 
@@ -854,7 +837,7 @@ fun LoginScreen(
                                             text = tr("पशु चिकित्सा परिषद पंजीयन संख्या (VCI / RVC Reg No.)", "Veterinary Council Reg No.", "पशुवैद्यकीय परिषद नोंदणी क्रमांक", "પશુ ચિકિત્સા પરિષદ નોંધણી નંબર", "ਪਸ਼ੂ ਚਿਕਿਤਸਾ ਕੌਂਸਲ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਨੰਬਰ"),
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.SemiBold,
-                                            color = Color(0xFF333333)
+                                            color = TextPrimary
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                         OutlinedTextField(
@@ -867,10 +850,7 @@ fun LoginScreen(
                                             placeholder = { Text("RVC-2022-4102") },
                                             shape = RoundedCornerShape(10.dp),
                                             singleLine = true,
-                                            colors = OutlinedTextFieldDefaults.colors(
-                                                focusedBorderColor = BlueVet,
-                                                unfocusedBorderColor = Color(0xFFCCCCCC)
-                                            )
+                                            colors = appTextFieldColors(focusedBorder = BlueVet)
                                         )
                                     }
 
@@ -938,7 +918,7 @@ fun LoginScreen(
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(16.dp),
-                                colors = CardDefaults.cardColors(containerColor = Color.White),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                             ) {
                                 Column(
@@ -961,7 +941,7 @@ fun LoginScreen(
                                             Text(
                                                 text = tr("विभागीय सरकारी ईमेल व पासवर्ड द्वारा प्रवेश करें", "Sign in with department govt email & password", "विभागीय शासकीय ईमेल व पासवर्डने प्रवेश करा", "વિભાગીય સરકારી ઇમેઇલ અને પાસવર્ડ દ્વારા પ્રવેશ કરો", "ਵਿਭਾਗੀ ਸਰਕਾਰੀ ਈਮੇਲ ਅਤੇ ਪਾਸਵਰਡ ਰਾਹੀਂ ਦਾਖਲ ਹੋਵੋ"),
                                                 fontSize = 12.sp,
-                                                color = Color(0xFF666666)
+                                                color = TextSecondary
                                             )
                                         }
 
@@ -1009,7 +989,7 @@ fun LoginScreen(
                                             text = tr("विभागीय सरकारी ईमेल (Govt Email) *", "Department Govt Email *", "विभागीय शासकीय ईमेल *", "વિભાગીય સરકારી ઇમેઇલ *", "ਵਿਭਾਗੀ ਸਰਕਾਰੀ ਈਮੇਲ *"),
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.SemiBold,
-                                            color = Color(0xFF333333)
+                                            color = TextPrimary
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                         OutlinedTextField(
@@ -1023,10 +1003,7 @@ fun LoginScreen(
                                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                                             shape = RoundedCornerShape(10.dp),
                                             singleLine = true,
-                                            colors = OutlinedTextFieldDefaults.colors(
-                                                focusedBorderColor = PurpleOfficer,
-                                                unfocusedBorderColor = Color(0xFFCCCCCC)
-                                            )
+                                            colors = appTextFieldColors(focusedBorder = PurpleOfficer)
                                         )
                                     }
 
@@ -1036,7 +1013,7 @@ fun LoginScreen(
                                             text = tr("पासवर्ड (Password) *", "Password *", "पासवर्ड *", "પાસવર્ડ *", "ਪਾਸਵਰਡ *"),
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.SemiBold,
-                                            color = Color(0xFF333333)
+                                            color = TextPrimary
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                         OutlinedTextField(
@@ -1051,7 +1028,7 @@ fun LoginScreen(
                                                     Icon(
                                                         imageVector = if (officerPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                                                         contentDescription = "Toggle password visibility",
-                                                        tint = Color(0xFF666666)
+                                                        tint = TextSecondary
                                                     )
                                                 }
                                             },
@@ -1060,10 +1037,7 @@ fun LoginScreen(
                                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
                                             shape = RoundedCornerShape(10.dp),
                                             singleLine = true,
-                                            colors = OutlinedTextFieldDefaults.colors(
-                                                focusedBorderColor = PurpleOfficer,
-                                                unfocusedBorderColor = Color(0xFFCCCCCC)
-                                            )
+                                            colors = appTextFieldColors(focusedBorder = PurpleOfficer)
                                         )
                                     }
 
@@ -1073,14 +1047,14 @@ fun LoginScreen(
                                             text = tr("कार्यक्षेत्र जिला / संभाग *", "Assigned District / Division *", "कार्यक्षेत्र जिल्हा / विभाग *", "કાર્યક્ષેત્ર જિલ્લો / વિભાગ *", "ਕਾਰਜ ਖੇਤਰ ਜ਼ਿਲ੍ਹਾ / ਮੰਡਲ *"),
                                             fontSize = 13.sp,
                                             fontWeight = FontWeight.SemiBold,
-                                            color = Color(0xFF333333)
+                                            color = TextPrimary
                                         )
                                         Spacer(modifier = Modifier.height(4.dp))
                                         Box {
                                             Surface(
                                                 shape = RoundedCornerShape(10.dp),
-                                                border = BorderStroke(1.dp, Color(0xFFCCCCCC)),
-                                                color = Color.White,
+                                                border = BorderStroke(1.dp, BorderLight),
+                                                color = MaterialTheme.colorScheme.surface,
                                                 modifier = Modifier
                                                     .fillMaxWidth()
                                                     .height(54.dp)
@@ -1096,9 +1070,9 @@ fun LoginScreen(
                                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                                         Icon(Icons.Default.LocationCity, contentDescription = null, tint = PurpleOfficer, modifier = Modifier.size(18.dp))
                                                         Spacer(modifier = Modifier.width(6.dp))
-                                                        Text(officerDistrict, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                                                        Text(officerDistrict, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
                                                     }
-                                                    Icon(Icons.Default.ArrowDropDown, contentDescription = null, tint = Color(0xFF666666))
+                                                    Icon(Icons.Default.ArrowDropDown, contentDescription = null, tint = TextSecondary)
                                                 }
                                             }
 
@@ -1108,7 +1082,7 @@ fun LoginScreen(
                                             ) {
                                                 districts.forEach { dist ->
                                                     DropdownMenuItem(
-                                                        text = { Text(dist) },
+                                                        text = { Text(dist, color = TextPrimary) },
                                                         onClick = {
                                                             officerDistrict = dist
                                                             officerDistrictMenuExpanded = false
@@ -1205,7 +1179,7 @@ fun LoginScreen(
                     Text(
                         text = tr("सहायता हेतु कॉल करें: 1962 (पशु चिकित्सा एम्बुलेंस)", "Helpdesk: 1962 (Livestock Ambulance)", "मदतीसाठी कॉल करा: 1962 (पशुवैद्यकीय रुग्णवाहिका)", "મદદ માટે કૉલ કરો: 1962 (પશુ ચિકિત્સા એમ્બ્યુલન્સ)", "ਮਦਦ ਲਈ ਕਾਲ ਕਰੋ: 1962 (ਪਸ਼ੂ ਚਿਕਿਤਸਾ ਐਂਬੂਲੈਂਸ)"),
                         fontSize = 12.sp,
-                        color = Color(0xFF555555),
+                        color = TextSecondary,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -1237,7 +1211,7 @@ private fun RoleTabButton(
                 text = title,
                 fontSize = 13.sp,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                color = if (isSelected) Color.White else Color(0xFF424242)
+                color = if (isSelected) Color.White else TextPrimary
             )
         }
     }

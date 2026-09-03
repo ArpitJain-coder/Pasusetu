@@ -5,9 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.data.model.AlertRecord
 import com.example.data.model.Appointment
 import com.example.data.model.Cattle
 import com.example.data.model.MedicalCase
+import com.example.data.model.MedicineRecord
+import com.example.data.model.UserProfileEntity
 import com.example.data.model.VaccineRecord
 import com.example.data.model.VaccineStatus
 import kotlinx.coroutines.CoroutineScope
@@ -15,8 +18,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Database(
-    entities = [Cattle::class, Appointment::class, MedicalCase::class, VaccineRecord::class],
-    version = 2,
+    entities = [
+        Cattle::class,
+        Appointment::class,
+        MedicalCase::class,
+        VaccineRecord::class,
+        AlertRecord::class,
+        MedicineRecord::class,
+        UserProfileEntity::class
+    ],
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -24,6 +35,9 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun appointmentDao(): AppointmentDao
     abstract fun medicalCaseDao(): MedicalCaseDao
     abstract fun vaccineDao(): VaccineDao
+    abstract fun alertDao(): AlertDao
+    abstract fun medicineDao(): MedicineDao
+    abstract fun userProfileDao(): UserProfileDao
 
     companion object {
         @Volatile
@@ -268,6 +282,126 @@ abstract class AppDatabase : RoomDatabase() {
                         alertMessageHindi = "लम्पी स्किन टीकाकरण सफलतापूर्वक पूर्ण हो चुका है।",
                         alertMessageEnglish = "LSD vaccination completed successfully."
                     )
+                )
+            )
+
+            // Pre-populate Disease and Weather Outbreak Alerts
+            val alertDao = database.alertDao()
+            alertDao.insertAll(
+                listOf(
+                    AlertRecord(
+                        title = "FMD (खुरपका मुंहपका) अलर्ट",
+                        englishTitle = "FMD (Foot & Mouth) Alert",
+                        description = "कोटपूतली व शाहपुरा क्षेत्र में 32 पशुओं में लक्षण पाए गए हैं। अपने पशुओं को स्वच्छ पानी दें और लक्षण दिखते ही अलग रखें।",
+                        englishDescription = "Symptoms detected in 32 animals in nearby area. Provide clean water and isolate symptomatic cattle immediately.",
+                        timestamp = "आज, 10:30 AM",
+                        isUrgent = true,
+                        source = "पशुपालन विभाग, राजस्थान सरकार",
+                        district = "जयपुर"
+                    ),
+                    AlertRecord(
+                        title = "गर्मियों में लू व निर्जलीकरण की चेतावनी",
+                        englishTitle = "Summer Heatwave & Dehydration Warning",
+                        description = "मौसम विभाग के अनुसार तापमान 44°C तक पहुँच सकता है। पशुओं को दोपहर में छाया में रखें और ओआरएस युक्त पानी दें।",
+                        englishDescription = "Temperature may reach 44°C. Keep cattle in shade during afternoons and provide electrolyte-enriched water.",
+                        timestamp = "कल, 04:15 PM",
+                        isUrgent = false,
+                        source = "मौसम एवं पशु कल्याण विभाग",
+                        district = "जयपुर"
+                    ),
+                    AlertRecord(
+                        title = "मुफ्त राष्ट्रीय पशु रोग नियंत्रण टीकाकरण शिविर",
+                        englishTitle = "Free National Animal Disease Vaccination Camp",
+                        description = "गाँव भाटी प्राथमिक पशु केंद्र पर 20 मई को ब्रूसेलोसिस व FMD का निःशुल्क टीकाकरण किया जाएगा।",
+                        englishDescription = "Free vaccination against Brucellosis & FMD on May 20 at primary veterinary center.",
+                        timestamp = "14 मई 2025",
+                        isUrgent = false,
+                        source = "प्राथमिक पशु केंद्र, भाटी",
+                        district = "जयपुर"
+                    )
+                )
+            )
+
+            // Pre-populate Essential Veterinary Medicines Inventory
+            val medicineDao = database.medicineDao()
+            medicineDao.insertAll(
+                listOf(
+                    MedicineRecord(
+                        name = "Melonex ORS",
+                        genericName = "Meloxicam + Paracetamol + Electrolytes",
+                        category = "दर्द निवारक",
+                        descriptionHindi = "दर्द व सूजन निवारक (Non-steroidal Anti-inflammatory)",
+                        descriptionEnglish = "Pain & Anti-inflammatory relief oral solution",
+                        dosageInfo = "बड़ा पशु: 100ml दिन में दो बार, छोटा पशु: 30ml",
+                        inStock = true,
+                        price = "₹ 145"
+                    ),
+                    MedicineRecord(
+                        name = "टेट्रासाइक्लिन (Tetracycline)",
+                        genericName = "Oxytetracycline HCl 500mg",
+                        category = "एंटीबायोटिक",
+                        descriptionHindi = "ब्रॉड स्पेक्ट्रम एंटीबायोटिक (500mg बोलस)",
+                        descriptionEnglish = "Broad spectrum antibiotic bolus",
+                        dosageInfo = "1 बोलस प्रतिदिन 3-5 दिन तक पशु चिकित्सक के परामर्श अनुसार",
+                        inStock = true,
+                        price = "₹ 85"
+                    ),
+                    MedicineRecord(
+                        name = "विटामिन बी-कॉम्प्लेक्स सिरप",
+                        genericName = "Vitamin B-Complex with Liver Extract",
+                        category = "टॉनिक",
+                        descriptionHindi = "ऊर्जा व भूख वर्धक टॉनिक (Belamyl/Liv-52)",
+                        descriptionEnglish = "Energy & appetite stimulant tonic",
+                        dosageInfo = "वयस्क पशु: 50ml प्रतिदिन, बछड़ा: 20ml प्रतिदिन",
+                        inStock = true,
+                        price = "₹ 190"
+                    ),
+                    MedicineRecord(
+                        name = "पोटैशियम परमैंगनेट (लाल दवा)",
+                        genericName = "Potassium Permanganate Crystals",
+                        category = "एंटीसेप्टिक",
+                        descriptionHindi = "खुर व मुंह के छाले धोने हेतु एंटीसेप्टिक घोल (1:1000)",
+                        descriptionEnglish = "Antiseptic wash for hooves & mouth blisters",
+                        dosageInfo = "हल्का गुलाबी घोल बनाकर छालों और खुरों को दिन में 2 बार धोएं",
+                        inStock = true,
+                        price = "₹ 45"
+                    ),
+                    MedicineRecord(
+                        name = "हिमालय बतीसा",
+                        genericName = "Himalaya Himabatisah Ayurvedic Formulation",
+                        category = "पाचक",
+                        descriptionHindi = "पाचन व अपच निवारक आयुर्वेदिक चूर्ण",
+                        descriptionEnglish = "Digestive & appetite stimulant ayurvedic powder",
+                        dosageInfo = "50 ग्राम गुड़ के साथ मिलाकर दिन में दो बार खिलाएं",
+                        inStock = true,
+                        price = "₹ 110"
+                    ),
+                    MedicineRecord(
+                        name = "टॉपिक्योर स्प्रे (Topicure Spray)",
+                        genericName = "Natural Fly Repellent & Wound Healing Spray",
+                        category = "एंटीसेप्टिक",
+                        descriptionHindi = "खुरपका घाव एवं कीड़ा मारने वाला हर्बल स्प्रे",
+                        descriptionEnglish = "Herbal wound healing & maggot repellent spray",
+                        dosageInfo = "घाव को साफ करके दिन में 2-3 बार छिड़कें",
+                        inStock = true,
+                        price = "₹ 160"
+                    )
+                )
+            )
+
+            // Pre-populate Default User Profile
+            val profileDao = database.userProfileDao()
+            profileDao.saveUserProfile(
+                UserProfileEntity(
+                    id = 1,
+                    name = "राम किसान",
+                    phoneOrEmail = "+91 98765 43210",
+                    address = "गाँव भाटी, कोटपूतली",
+                    district = "जयपुर",
+                    pincode = "303108",
+                    role = "FARMER",
+                    regOrDeptId = "K-RAJ-4091",
+                    selectedLanguage = "हिंदी"
                 )
             )
         }

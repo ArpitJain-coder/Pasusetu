@@ -122,6 +122,8 @@ fun PashuSetuApp(
     val selectedCase by viewModel.selectedCase.collectAsState()
     val districtSummary by viewModel.districtSummary.collectAsState()
     val vaccineList by viewModel.vaccineList.collectAsState()
+    val alertList by viewModel.alertList.collectAsState()
+    val medicineList by viewModel.medicineList.collectAsState()
 
     val isHindi = viewModel.isHindi()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -330,6 +332,7 @@ fun PashuSetuApp(
                         onLanguageChange = { viewModel.setLanguage(it) },
                         isHindi = isHindi,
                         onToggleLanguage = { viewModel.toggleLanguage() },
+                        onBackClick = { currentScreen = Screen.Welcome },
                         onRoleSelected = { role ->
                             currentScreen = Screen.Login(role)
                         }
@@ -394,6 +397,7 @@ fun PashuSetuApp(
                         onSpeakClick = { viewModel.speakDiagnosisAdvice() },
                         onStopSpeakingClick = { viewModel.stopSpeaking() },
                         onBackClick = { currentScreen = Screen.Diagnosis },
+                        onSaveCaseClick = { viewModel.saveDiagnosisAsMedicalCase() },
                         onContactVetClick = {
                             viewModel.scheduleVetAppointment(
                                 cattleTag = selectedCattleForDiag?.tagNumber ?: "G001",
@@ -496,6 +500,7 @@ fun PashuSetuApp(
                 }
 
                 is Screen.MainApp -> {
+                    val unreadAlerts = alertList.count { !it.isRead } + vaccineList.count { it.status == com.example.data.model.VaccineStatus.DUE || it.status == com.example.data.model.VaccineStatus.OVERDUE }
                     Scaffold(
                         bottomBar = {
                             PashuSetuBottomBar(
@@ -503,6 +508,7 @@ fun PashuSetuApp(
                                 currentTab = currentTab,
                                 onTabSelected = { currentTab = it },
                                 selectedLanguage = selectedLanguage,
+                                unreadAlertCount = unreadAlerts,
                                 onCenterActionClick = {
                                     when (currentRole) {
                                         UserRole.FARMER -> currentScreen = Screen.Diagnosis
@@ -560,9 +566,13 @@ fun PashuSetuApp(
                                             }
                                         )
                                         "alerts" -> AlertsScreen(
+                                            alertList = alertList,
                                             vaccineList = vaccineList,
                                             selectedLanguage = selectedLanguage,
-                                            onOpenVaccineSchedule = { currentScreen = Screen.VaccineSchedule }
+                                            onOpenVaccineSchedule = { currentScreen = Screen.VaccineSchedule },
+                                            onMarkRead = { viewModel.markAlertAsRead(it) },
+                                            onDeleteAlert = { viewModel.deleteAlert(it) },
+                                            onBroadcastAlert = { t, et, d, ed, u -> viewModel.broadcastAlert(t, et, d, ed, u) }
                                         )
                                         "profile" -> ProfileScreen(
                                             currentRole = currentRole,
@@ -642,7 +652,10 @@ fun PashuSetuApp(
                                                 )
                                             }
                                         }
-                                        "medicines" -> MedicinesScreen(selectedLanguage = selectedLanguage)
+                                        "medicines" -> MedicinesScreen(
+                                            medicineList = medicineList,
+                                            selectedLanguage = selectedLanguage
+                                        )
                                         "profile" -> ProfileScreen(
                                             currentRole = currentRole,
                                             selectedLanguage = selectedLanguage,
@@ -689,9 +702,13 @@ fun PashuSetuApp(
                                             onDistrictChange = { viewModel.selectDistrict(it) }
                                         )
                                         "alerts" -> AlertsScreen(
+                                            alertList = alertList,
                                             vaccineList = vaccineList,
                                             selectedLanguage = selectedLanguage,
-                                            onOpenVaccineSchedule = { currentScreen = Screen.VaccineSchedule }
+                                            onOpenVaccineSchedule = { currentScreen = Screen.VaccineSchedule },
+                                            onMarkRead = { viewModel.markAlertAsRead(it) },
+                                            onDeleteAlert = { viewModel.deleteAlert(it) },
+                                            onBroadcastAlert = { t, et, d, ed, u -> viewModel.broadcastAlert(t, et, d, ed, u) }
                                         )
                                         "more" -> ProfileScreen(
                                             currentRole = currentRole,

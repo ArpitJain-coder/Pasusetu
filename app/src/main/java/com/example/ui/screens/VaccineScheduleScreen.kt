@@ -69,9 +69,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.VaccineRecord
 import com.example.data.model.VaccineStatus
+import androidx.compose.material3.MaterialTheme
+import com.example.ui.theme.AmberSecondary
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.GreenPrimary
 import com.example.ui.theme.StatusSick
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.TextTertiary
+import com.example.ui.theme.appTextFieldColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,7 +126,7 @@ fun VaccineScheduleScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color(0xFFF9FAF8)
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // Top Bar
@@ -130,7 +136,7 @@ fun VaccineScheduleScreen(
                         text = tr("पशु टीकाकरण शेड्यूल", "Vaccination Schedule", "पशू लसीकरण वेळापत्रक", "પશુ રસીકરણ સમયપત્રક", "ਪਸ਼ੂ ਟੀਕਾਕਰਨ ਸ਼ਡਿਊਲ"),
                         fontSize = 19.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -138,7 +144,7 @@ fun VaccineScheduleScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = tr("वापस", "Back", "मागे", "પાછા", "ਵਾਪਸ"),
-                            tint = Color(0xFF1B241C)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
@@ -154,7 +160,7 @@ fun VaccineScheduleScreen(
                         Text(tr("+ टीका जोड़ें", "+ Add Vaccine", "+ लस जोडा", "+ રસી ઉમેરો", "+ ਟੀਕਾ ਜੋੜੋ"), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
 
             LazyColumn(
@@ -214,7 +220,7 @@ fun VaccineScheduleScreen(
                                             .fillMaxWidth()
                                             .padding(vertical = 4.dp),
                                         shape = RoundedCornerShape(10.dp),
-                                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                                     ) {
                                         Row(
                                             modifier = Modifier
@@ -228,13 +234,13 @@ fun VaccineScheduleScreen(
                                                     text = if (selectedLanguage == "English") due.englishName else due.vaccineName,
                                                     fontSize = 14.sp,
                                                     fontWeight = FontWeight.Bold,
-                                                    color = Color(0xFF1B241C)
+                                                    color = TextPrimary
                                                 )
                                                 Text(
                                                     text = "${tr("नियत तिथि", "Due Date")}: ${due.scheduledDate} • ${due.locationCenter}",
-                                                    fontSize = 11.sp,
-                                                    color = Color(0xFFD84315),
-                                                    fontWeight = FontWeight.Medium
+                                                    fontSize = 12.sp,
+                                                    color = AmberSecondary,
+                                                    fontWeight = FontWeight.SemiBold
                                                 )
                                             }
 
@@ -399,7 +405,7 @@ private fun VaccineCardItem(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.5.dp)
     ) {
         Column(
@@ -418,12 +424,12 @@ private fun VaccineCardItem(
                         text = if (selectedLanguage == "English") vaccine.englishName else vaccine.vaccineName,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = TextPrimary
                     )
                     Text(
                         text = vaccine.targetDisease,
-                        fontSize = 12.sp,
-                        color = Color(0xFF616161)
+                        fontSize = 13.sp,
+                        color = TextSecondary
                     )
                 }
 
@@ -434,7 +440,7 @@ private fun VaccineCardItem(
                 ) {
                     Text(
                         text = badgeLabel,
-                        fontSize = 11.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         color = badgeTextColor,
                         modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
@@ -455,7 +461,7 @@ private fun VaccineCardItem(
                     text = "${tr("निर्धारित तिथि", "Scheduled Date")}: ${vaccine.scheduledDate}",
                     fontSize = 13.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = if (isDue) Color(0xFFD84315) else Color(0xFF37474F)
+                    color = if (isDue) AmberSecondary else TextPrimary
                 )
             }
 
@@ -465,12 +471,12 @@ private fun VaccineCardItem(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(Icons.Default.Pets, contentDescription = null, tint = Color(0xFF757575), modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.Pets, contentDescription = null, tint = TextSecondary, modifier = Modifier.size(16.dp))
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "${tr("लक्षित पशु", "Target Stock")}: ${vaccine.targetAnimal} (${vaccine.batchOrCattleTag})",
-                    fontSize = 12.sp,
-                    color = Color(0xFF424242)
+                    fontSize = 13.sp,
+                    color = TextSecondary
                 )
             }
 
@@ -480,12 +486,12 @@ private fun VaccineCardItem(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(Icons.Default.LocationOn, contentDescription = null, tint = Color(0xFF757575), modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.LocationOn, contentDescription = null, tint = TextSecondary, modifier = Modifier.size(16.dp))
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = vaccine.locationCenter,
-                    fontSize = 12.sp,
-                    color = Color(0xFF616161)
+                    fontSize = 13.sp,
+                    color = TextSecondary
                 )
             }
 
@@ -495,12 +501,12 @@ private fun VaccineCardItem(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(Icons.Default.Schedule, contentDescription = null, tint = Color(0xFF757575), modifier = Modifier.size(16.dp))
+                Icon(Icons.Default.Schedule, contentDescription = null, tint = TextSecondary, modifier = Modifier.size(16.dp))
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "${tr("मात्रा", "Dosage")}: ${vaccine.dosage} • ${vaccine.intervalOrFrequency}",
-                    fontSize = 12.sp,
-                    color = Color(0xFF757575)
+                    fontSize = 13.sp,
+                    color = TextSecondary
                 )
             }
 
@@ -594,31 +600,36 @@ private fun AddVaccineDialog(
                     value = name,
                     onValueChange = { name = it },
                     label = { Text(tr("वैक्सीन का नाम (हिंदी)", "Vaccine Name")) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = appTextFieldColors()
                 )
                 OutlinedTextField(
                     value = enName,
                     onValueChange = { enName = it },
                     label = { Text(tr("वैक्सीन का नाम (English)", "English Name")) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = appTextFieldColors()
                 )
                 OutlinedTextField(
                     value = disease,
                     onValueChange = { disease = it },
                     label = { Text(tr("लक्षित रोग", "Target Disease")) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = appTextFieldColors()
                 )
                 OutlinedTextField(
                     value = date,
                     onValueChange = { date = it },
                     label = { Text(tr("निर्धारित तिथि", "Scheduled Date")) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = appTextFieldColors()
                 )
                 OutlinedTextField(
                     value = location,
                     onValueChange = { location = it },
                     label = { Text(tr("टीकाकरण केंद्र", "Vaccine Center")) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = appTextFieldColors()
                 )
             }
         },

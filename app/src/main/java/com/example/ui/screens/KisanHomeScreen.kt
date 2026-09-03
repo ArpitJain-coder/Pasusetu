@@ -8,6 +8,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -72,10 +74,14 @@ import androidx.compose.ui.unit.sp
 import com.example.R
 import com.example.data.model.Cattle
 import com.example.ui.components.CattleAvatar
+import androidx.compose.material3.MaterialTheme
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.GreenPrimary
 import com.example.ui.theme.StatusPregnant
 import com.example.ui.theme.StatusSick
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.TextTertiary
 import com.example.ui.util.AppStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -121,7 +127,7 @@ fun KisanHomeScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color(0xFFF9FAF8)
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier
@@ -135,7 +141,7 @@ fun KisanHomeScreen(
                         text = tr("किसान होम", "Farmer Home", "शेतकरी होम", "ખેડૂત હોમ", "ਕਿਸਾਨ ਹੋਮ"),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -143,7 +149,7 @@ fun KisanHomeScreen(
                         Icon(
                             imageVector = Icons.Default.Menu,
                             contentDescription = "Menu",
-                            tint = Color(0xFF1B241C)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
@@ -248,14 +254,20 @@ fun KisanHomeScreen(
                         }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.TopCenter
             ) {
+                val isWide = maxWidth > 680.dp
+                Column(
+                    modifier = Modifier
+                        .widthIn(max = 720.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = if (isWide) 24.dp else 16.dp, vertical = 12.dp)
+                ) {
                 // Greeting & Location with Farmer Avatar
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -267,12 +279,12 @@ fun KisanHomeScreen(
                             text = tr("नमस्ते, ${farmerName.take(15)} जी 👋", "Hello, ${farmerName.take(15)} 👋", "नमस्कार, ${farmerName.take(15)} जी 👋", "નમસ્તે, ${farmerName.take(15)} ભાઈ 👋", "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ, ${farmerName.take(15)} ਜੀ 👋"),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(0xFF1B241C)
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = tr("स्थान: $farmerVillage", "Location: $farmerVillage", "स्थान: $farmerVillage", "સ્થળ: $farmerVillage", "ਸਥਾਨ: $farmerVillage"),
-                            fontSize = 12.sp,
-                            color = Color(0xFF616161)
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     Image(
@@ -344,7 +356,7 @@ fun KisanHomeScreen(
                         .fillMaxWidth()
                         .clickable { onMyCattleClick() },
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                 ) {
                     Column(
@@ -361,7 +373,7 @@ fun KisanHomeScreen(
                                 text = tr("मेरे पशुधन की स्थिति", "My Herd Health Status", "माझ्या पशुधनाची स्थिती", "મારા પશુધનની સ્થિતિ", "ਮੇਰੇ ਪਸ਼ੂਧਨ ਦੀ ਸਥਿਤੀ"),
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF1B241C)
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
                                 text = tr("सभी देखें →", "View all →", "सर्व पहा →", "બધા જુઓ →", "ਸਾਰੇ ਵੇਖੋ →"),
@@ -573,7 +585,7 @@ fun KisanHomeScreen(
                         .fillMaxWidth()
                         .clickable { onVaccineScheduleClick() },
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                 ) {
                     Row(
@@ -589,7 +601,7 @@ fun KisanHomeScreen(
                                     text = tr("अगला टीकाकरण (Vaccine Schedule)", "Next Scheduled Vaccine", "पुढील नियोजित लसीकरण", "આગામી રસીકરણ", "ਅਗਲਾ ਟੀਕਾਕਰਨ"),
                                     fontSize = 13.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = Color(0xFF616161)
+                                    color = TextSecondary
                                 )
                                 if (nextVaccine?.status == VaccineStatus.DUE || nextVaccine?.status == VaccineStatus.OVERDUE) {
                                     Spacer(modifier = Modifier.width(6.dp))
@@ -616,7 +628,7 @@ fun KisanHomeScreen(
                                 },
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF1B241C)
+                                color = TextPrimary
                             )
                             Text(
                                 text = if (nextVaccine != null) {
@@ -655,7 +667,7 @@ fun KisanHomeScreen(
                     text = tr("त्वरित सेवाएं", "Quick Actions", "जलद सेवा", "ઝડપી સેવાઓ", "ਤੁਰੰਤ ਸੇਵਾਵਾਂ"),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1B241C)
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -762,6 +774,7 @@ fun KisanHomeScreen(
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
+            }
             }
         }
 
@@ -899,8 +912,9 @@ private fun StatBadge(
         )
         Text(
             text = label,
-            fontSize = 11.sp,
-            color = Color(0xFF555555)
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            color = TextSecondary
         )
     }
 }
@@ -916,10 +930,10 @@ private fun QuickActionCard(
 ) {
     Card(
         modifier = modifier
-            .height(110.dp)
+            .height(112.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.5.dp)
     ) {
         Column(
@@ -948,10 +962,10 @@ private fun QuickActionCard(
 
             Text(
                 text = title,
-                fontSize = 11.sp,
-                lineHeight = 14.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color(0xFF222222),
+                fontSize = 12.sp,
+                lineHeight = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = TextPrimary,
                 textAlign = TextAlign.Center
             )
         }

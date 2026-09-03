@@ -212,8 +212,8 @@ fun DistrictHealthMap(
                     .align(Alignment.TopEnd)
                     .padding(12.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color.White)
-                    .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
             ) {
                 IconButton(
                     onClick = { zoomLevel = (zoomLevel + 0.2f).coerceAtMost(2.0f) },
@@ -222,14 +222,14 @@ fun DistrictHealthMap(
                     Icon(
                         imageVector = Icons.Default.Add,
                         contentDescription = "Zoom in",
-                        tint = Color(0xFF424242)
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
                 Box(
                     modifier = Modifier
                         .width(36.dp)
                         .height(1.dp)
-                        .background(Color(0xFFEEEEEE))
+                        .background(MaterialTheme.colorScheme.outlineVariant)
                 )
                 IconButton(
                     onClick = { zoomLevel = (zoomLevel - 0.2f).coerceAtLeast(0.8f) },
@@ -238,7 +238,7 @@ fun DistrictHealthMap(
                     Icon(
                         imageVector = Icons.Default.Remove,
                         contentDescription = "Zoom out",
-                        tint = Color(0xFF424242)
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -251,12 +251,12 @@ fun DistrictHealthMap(
                     .padding(12.dp)
                     .size(38.dp)
                     .shadow(3.dp, CircleShape)
-                    .background(Color.White, CircleShape)
+                    .background(MaterialTheme.colorScheme.surface, CircleShape)
             ) {
                 Icon(
                     imageVector = Icons.Default.Layers,
                     contentDescription = "Layers",
-                    tint = Color(0xFF424242)
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
 

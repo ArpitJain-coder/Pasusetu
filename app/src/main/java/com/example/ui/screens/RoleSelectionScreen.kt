@@ -19,14 +19,21 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,14 +50,15 @@ import androidx.compose.ui.unit.sp
 import com.example.data.model.UserRole
 import com.example.ui.components.RoleAvatar
 import com.example.ui.theme.BlueVet
+import com.example.ui.theme.GreenContainer
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.GreenPrimary
 import com.example.ui.theme.PurpleOfficer
-
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
 import com.example.ui.util.AppStrings
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoleSelectionScreen(
     onRoleSelected: (UserRole) -> Unit,
@@ -58,128 +66,135 @@ fun RoleSelectionScreen(
     onLanguageChange: (String) -> Unit = {},
     isHindi: Boolean = selectedLanguage == "हिंदी",
     onToggleLanguage: () -> Unit = {},
+    onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var langMenuExpanded by remember { mutableStateOf(false) }
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color(0xFFFAFBF9)
+        color = MaterialTheme.colorScheme.background
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // Language Selector Pill in header
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Box {
-                    Surface(
-                        shape = RoundedCornerShape(16.dp),
-                        color = Color(0xFFE8F5E9),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, GreenPrimary.copy(alpha = 0.4f)),
-                        modifier = Modifier.clickable { langMenuExpanded = true }
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-                            verticalAlignment = Alignment.CenterVertically
+        Column(modifier = Modifier.fillMaxSize()) {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = AppStrings.t("role_select_title", selectedLanguage),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = TextPrimary
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = TextPrimary
+                        )
+                    }
+                },
+                actions = {
+                    Box {
+                        Surface(
+                            shape = RoundedCornerShape(16.dp),
+                            color = GreenContainer,
+                            border = androidx.compose.foundation.BorderStroke(1.dp, GreenPrimary.copy(alpha = 0.4f)),
+                            modifier = Modifier
+                                .clickable { langMenuExpanded = true }
+                                .padding(end = 8.dp)
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.Language,
-                                contentDescription = "Language",
-                                tint = GreenDark,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(
-                                text = selectedLanguage,
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = GreenDark
-                            )
+                            Row(
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Language,
+                                    contentDescription = "Language",
+                                    tint = GreenDark,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = selectedLanguage,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = GreenDark
+                                )
+                            }
                         }
-                    }
 
-                    DropdownMenu(
-                        expanded = langMenuExpanded,
-                        onDismissRequest = { langMenuExpanded = false }
-                    ) {
-                        AppStrings.SUPPORTED_LANGUAGES.forEach { lang ->
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = lang,
-                                        fontWeight = if (lang == selectedLanguage) FontWeight.Bold else FontWeight.Normal,
-                                        color = if (lang == selectedLanguage) GreenDark else Color.Black
-                                    )
-                                },
-                                onClick = {
-                                    onLanguageChange(lang)
-                                    langMenuExpanded = false
-                                }
-                            )
+                        DropdownMenu(
+                            expanded = langMenuExpanded,
+                            onDismissRequest = { langMenuExpanded = false }
+                        ) {
+                            AppStrings.SUPPORTED_LANGUAGES.forEach { lang ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = lang,
+                                            fontWeight = if (lang == selectedLanguage) FontWeight.Bold else FontWeight.Normal,
+                                            color = if (lang == selectedLanguage) GreenDark else TextPrimary
+                                        )
+                                    },
+                                    onClick = {
+                                        onLanguageChange(lang)
+                                        langMenuExpanded = false
+                                    }
+                                )
+                            }
                         }
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = AppStrings.t("role_select_subtitle", selectedLanguage),
+                    fontSize = 14.sp,
+                    color = TextSecondary,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // Role Card 1: किसान (Farmer)
+                RoleSelectionCard(
+                    roleTitle = AppStrings.t("role_farmer_full", selectedLanguage),
+                    description = AppStrings.t("farmer_desc", selectedLanguage),
+                    accentColor = GreenDark,
+                    onClick = { onRoleSelected(UserRole.FARMER) }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Role Card 2: पशु चिकित्सक (Vet)
+                RoleSelectionCard(
+                    roleTitle = AppStrings.t("role_vet_full", selectedLanguage),
+                    description = AppStrings.t("vet_desc", selectedLanguage),
+                    accentColor = BlueVet,
+                    onClick = { onRoleSelected(UserRole.VET) }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Role Card 3: जिला अधिकारी (District Officer)
+                RoleSelectionCard(
+                    roleTitle = AppStrings.t("role_officer_full", selectedLanguage),
+                    description = AppStrings.t("officer_desc", selectedLanguage),
+                    accentColor = PurpleOfficer,
+                    onClick = { onRoleSelected(UserRole.OFFICER) }
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = AppStrings.t("role_select_title", selectedLanguage),
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF1E2721),
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            Text(
-                text = AppStrings.t("role_select_subtitle", selectedLanguage),
-                fontSize = 14.sp,
-                color = Color(0xFF666666),
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Role Card 1: किसान (Farmer)
-            RoleSelectionCard(
-                roleTitle = AppStrings.t("role_farmer_full", selectedLanguage),
-                description = AppStrings.t("farmer_desc", selectedLanguage),
-                accentColor = GreenDark,
-                onClick = { onRoleSelected(UserRole.FARMER) }
-            )
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            // Role Card 2: पशु चिकित्सक (Vet)
-            RoleSelectionCard(
-                roleTitle = AppStrings.t("role_vet_full", selectedLanguage),
-                description = AppStrings.t("vet_desc", selectedLanguage),
-                accentColor = BlueVet,
-                onClick = { onRoleSelected(UserRole.VET) }
-            )
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            // Role Card 3: जिला अधिकारी (District Officer)
-            RoleSelectionCard(
-                roleTitle = AppStrings.t("role_officer_full", selectedLanguage),
-                description = AppStrings.t("officer_desc", selectedLanguage),
-                accentColor = PurpleOfficer,
-                onClick = { onRoleSelected(UserRole.OFFICER) }
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
@@ -196,7 +211,7 @@ private fun RoleSelectionCard(
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -221,7 +236,7 @@ private fun RoleSelectionCard(
                     text = roleTitle,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1E2721)
+                    color = TextPrimary
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -230,7 +245,7 @@ private fun RoleSelectionCard(
                     text = description,
                     fontSize = 13.sp,
                     lineHeight = 18.sp,
-                    color = Color(0xFF616161)
+                    color = TextSecondary
                 )
             }
 

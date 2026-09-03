@@ -28,6 +28,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -49,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.model.Cattle
 import com.example.ui.components.CattleAvatar
+import com.example.ui.theme.BorderLight
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.GreenPrimary
 import com.example.ui.theme.StatusHealthy
@@ -57,6 +59,9 @@ import com.example.ui.theme.StatusPregnant
 import com.example.ui.theme.StatusPregnantBg
 import com.example.ui.theme.StatusSick
 import com.example.ui.theme.StatusSickBg
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
+import com.example.ui.theme.appTextFieldColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,7 +85,7 @@ fun MyCattleScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color(0xFFF9FAF8)
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // Top App Bar matching Screen 4
@@ -90,7 +95,7 @@ fun MyCattleScreen(
                         text = tr("मेरे पशु", "My Cattle", "माझे पशू", "મારા પશુઓ", "ਮੇਰੇ ਪਸ਼ੂ"),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -98,7 +103,7 @@ fun MyCattleScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = tr("वापस", "Back", "मागे", "પાછા", "ਵਾਪਸ"),
-                            tint = Color(0xFF1B241C)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
@@ -127,7 +132,7 @@ fun MyCattleScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
 
             // Cattle List
@@ -206,7 +211,7 @@ private fun CattleListItem(
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.5.dp)
     ) {
         Row(
@@ -230,7 +235,7 @@ private fun CattleListItem(
                     text = "$localizedAnimalType – ${cattle.tagNumber}",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1B241C)
+                    color = TextPrimary
                 )
 
                 Spacer(modifier = Modifier.height(3.dp))
@@ -238,7 +243,7 @@ private fun CattleListItem(
                 Text(
                     text = "${tr("उम्र", "Age", "वय", "ઉંમર", "ਉਮਰ")}: ${cattle.ageYears} ${tr("वर्ष", "yrs", "वर्षे", "વર્ષ", "ਸਾਲ")}",
                     fontSize = 13.sp,
-                    color = Color(0xFF616161)
+                    color = TextSecondary
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
@@ -248,7 +253,7 @@ private fun CattleListItem(
                     Text(
                         text = "${tr("स्थिति", "Status", "स्थिती", "સ્થિતિ", "ਸਥਿਤੀ")}: ",
                         fontSize = 13.sp,
-                        color = Color(0xFF616161)
+                        color = TextSecondary
                     )
                     Text(
                         text = localizedStatus,
@@ -267,7 +272,7 @@ private fun CattleListItem(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = tr("विवरण देखें", "View Details", "तपशील पहा", "વિગતો જુઓ", "ਵੇਰਵੇ ਵੇਖੋ"),
-                tint = Color(0xFF9E9E9E),
+                tint = TextSecondary,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -300,7 +305,8 @@ private fun AddCattleDialog(
             Text(
                 text = tr("नया पशु जोड़ें", "Add New Cattle", "नवीन पशू जोडा", "નવું પશુ ઉમેરો", "ਨਵਾਂ ਪਸ਼ੂ ਜੋੜੋ"),
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = TextPrimary
             )
         },
         text = {
@@ -309,11 +315,12 @@ private fun AddCattleDialog(
                     value = tag,
                     onValueChange = { tag = it },
                     label = { Text(tr("टैग नंबर (Tag ID)", "Tag Number (Tag ID)", "टॅग क्रमांक (Tag ID)", "ટેગ નંબર (Tag ID)", "ਟੈਗ ਨੰਬਰ (Tag ID)")) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = appTextFieldColors()
                 )
 
                 // Animal Type selector
-                Text(tr("पशु का प्रकार:", "Animal Type:", "पशूचा प्रकार:", "પશુનો પ્રકાર:", "ਪਸ਼ੂ ਦੀ ਕਿਸਮ:"), fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                Text(tr("पशु का प्रकार:", "Animal Type:", "पशूचा प्रकार:", "પશુનો પ્રકાર:", "ਪਸ਼ੂ ਦੀ ਕਿਸਮ:"), fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     val animalTypes = listOf(
                         Triple("गाय", tr("गाय", "Cow", "गाय", "ગાય", "ਗਾਂ"), "Cow"),
@@ -325,13 +332,13 @@ private fun AddCattleDialog(
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(if (selected) GreenDark else Color(0xFFEEEEEE))
+                                .background(if (selected) GreenDark else BorderLight)
                                 .clickable { type = rawVal }
                                 .padding(horizontal = 14.dp, vertical = 8.dp)
                         ) {
                             Text(
                                 text = label,
-                                color = if (selected) Color.White else Color.Black,
+                                color = if (selected) Color.White else TextPrimary,
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Medium
                             )
@@ -343,11 +350,12 @@ private fun AddCattleDialog(
                     value = ageText,
                     onValueChange = { ageText = it },
                     label = { Text(tr("उम्र (वर्ष)", "Age (Years)", "वय (वर्षे)", "ઉંમર (વર્ષ)", "ਉਮਰ (ਸਾਲ)")) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = appTextFieldColors()
                 )
 
                 // Status selector
-                Text(tr("स्वास्थ्य स्थिति:", "Health Status:", "आरोग्य स्थिती:", "આરોગ્ય સ્થિતિ:", "ਸਿਹਤ ਸਥਿਤੀ:"), fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                Text(tr("स्वास्थ्य स्थिति:", "Health Status:", "आरोग्य स्थिती:", "આરોગ્ય સ્થિતિ:", "ਸਿਹਤ ਸਥਿਤੀ:"), fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = TextPrimary)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     val statusOptions = listOf(
                         Triple("स्वस्थ", tr("स्वस्थ", "Healthy", "निरोगी", "સ્વસ્થ", "ਸਿਹਤਮੰਦ"), StatusHealthy),
@@ -359,13 +367,13 @@ private fun AddCattleDialog(
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(if (selected) selColor else Color(0xFFEEEEEE))
+                                .background(if (selected) selColor else BorderLight)
                                 .clickable { status = rawStatus }
                                 .padding(horizontal = 12.dp, vertical = 8.dp)
                         ) {
                             Text(
                                 text = label,
-                                color = if (selected) Color.White else Color.Black,
+                                color = if (selected) Color.White else TextPrimary,
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Medium
                             )
@@ -377,7 +385,8 @@ private fun AddCattleDialog(
                     value = breed,
                     onValueChange = { breed = it },
                     label = { Text(tr("नस्ल (Breed)", "Breed", "जात (Breed)", "નસલ (Breed)", "ਨਸਲ (Breed)")) },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = appTextFieldColors()
                 )
             }
         },
@@ -389,12 +398,12 @@ private fun AddCattleDialog(
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = GreenDark)
             ) {
-                Text(tr("सुरक्षित करें", "Save", "जतन करा", "સાચવો", "ਸੁਰੱਖਿਅਤ ਕਰੋ"))
+                Text(tr("सुरक्षित करें", "Save", "जतन करा", "સાચવો", "ਸੁਰੱਖਿਅਤ ਕਰੋ"), color = Color.White)
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(tr("रद्द करें", "Cancel", "रद्द करा", "રદ કરો", "ਰੱਦ ਕਰੋ"))
+                Text(tr("रद्द करें", "Cancel", "रद्द करा", "રદ કરો", "ਰੱਦ ਕਰੋ"), color = TextSecondary)
             }
         }
     )

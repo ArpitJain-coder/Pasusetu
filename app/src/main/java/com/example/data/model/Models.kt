@@ -81,3 +81,47 @@ data class HeatZone(
     val xPercent: Float,
     val yPercent: Float
 )
+
+@Entity(tableName = "alerts")
+data class AlertRecord(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val title: String,
+    val englishTitle: String = title,
+    val description: String,
+    val englishDescription: String = description,
+    val timestamp: String = "आज, 10:30 AM",
+    val isUrgent: Boolean = false,
+    val source: String = "पशुपालन विभाग",
+    val district: String = "जयपुर",
+    val isRead: Boolean = false
+)
+
+@Entity(tableName = "medicines")
+data class MedicineRecord(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val name: String,
+    val genericName: String = "",
+    val category: String = "सामान्य", // "दर्द निवारक", "एंटीबायोटिक", "टॉनिक", "एंटीसेप्टिक", "पाचक"
+    val descriptionHindi: String,
+    val descriptionEnglish: String,
+    val dosageInfo: String = "पशु चिकित्सक के परामर्श अनुसार",
+    val inStock: Boolean = true,
+    val price: String = "₹ 120"
+)
+
+@Entity(tableName = "user_profiles")
+data class UserProfileEntity(
+    @PrimaryKey
+    val id: Int = 1, // Single active user profile row
+    val name: String = "राम किसान",
+    val phoneOrEmail: String = "+91 98765 43210",
+    val address: String = "गाँव भाटी, कोटपूतली",
+    val district: String = "जयपुर",
+    val pincode: String = "303108",
+    val role: String = "FARMER",
+    val regOrDeptId: String = "",
+    val selectedLanguage: String = "हिंदी"
+)
+

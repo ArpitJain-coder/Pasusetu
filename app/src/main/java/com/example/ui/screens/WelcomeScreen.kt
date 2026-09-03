@@ -52,8 +52,11 @@ import androidx.compose.ui.unit.sp
 import com.example.ui.components.CattleAvatar
 import com.example.ui.components.PashuSetuHeroGraphic
 import com.example.ui.theme.AmberSecondary
+import com.example.ui.theme.GreenContainer
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.GreenPrimary
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
 
 @Composable
 fun WelcomeScreen(
@@ -101,7 +104,7 @@ fun WelcomeScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color.White
+        color = androidx.compose.material3.MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier
@@ -121,7 +124,7 @@ fun WelcomeScreen(
             ) {
                 Surface(
                     shape = RoundedCornerShape(20.dp),
-                    color = Color(0xFFF1F8E9),
+                    color = GreenContainer,
                     border = androidx.compose.foundation.BorderStroke(1.dp, GreenPrimary.copy(alpha = 0.4f)),
                     modifier = Modifier.clickable { langMenuExpanded = true }
                 ) {
@@ -165,7 +168,7 @@ fun WelcomeScreen(
                                         Text(
                                             text = lang,
                                             fontWeight = if (lang == selectedLanguage) FontWeight.Bold else FontWeight.Normal,
-                                            color = if (lang == selectedLanguage) GreenDark else Color(0xFF1B241C)
+                                            color = if (lang == selectedLanguage) GreenDark else TextPrimary
                                         )
                                         if (lang == selectedLanguage) {
                                             Icon(
@@ -239,7 +242,7 @@ fun WelcomeScreen(
                         text = text,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF333333),
+                        color = TextSecondary,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -291,20 +294,20 @@ fun WelcomeScreen(
                         .height(52.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFF2E3A2F)
+                        contentColor = TextPrimary
                     )
                 ) {
                     Icon(
                         imageVector = Icons.Default.PhoneAndroid,
                         contentDescription = "Phone icon",
                         modifier = Modifier.size(20.dp),
-                        tint = Color(0xFF2E3A2F)
+                        tint = TextPrimary
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = mobileText,
                         fontSize = 15.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
             }
@@ -319,7 +322,7 @@ fun WelcomeScreen(
                 Text(
                     text = selectLanguageLabel,
                     fontSize = 13.sp,
-                    color = Color(0xFF666666),
+                    color = TextSecondary,
                     fontWeight = FontWeight.Medium
                 )
 
@@ -334,8 +337,8 @@ fun WelcomeScreen(
                         val isSelected = lang == selectedLanguage
                         Surface(
                             shape = RoundedCornerShape(16.dp),
-                            color = if (isSelected) GreenDark else Color(0xFFF5F5F5),
-                            border = if (isSelected) null else androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE0E0E0)),
+                            color = if (isSelected) GreenDark else androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant,
+                            border = if (isSelected) null else androidx.compose.foundation.BorderStroke(1.dp, androidx.compose.material3.MaterialTheme.colorScheme.outlineVariant),
                             modifier = Modifier
                                 .padding(horizontal = 4.dp)
                                 .clickable { onLanguageChange(lang) }
@@ -344,7 +347,7 @@ fun WelcomeScreen(
                                 text = lang,
                                 fontSize = 12.sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                color = if (isSelected) Color.White else Color(0xFF424242),
+                                color = if (isSelected) Color.White else TextPrimary,
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                             )
                         }

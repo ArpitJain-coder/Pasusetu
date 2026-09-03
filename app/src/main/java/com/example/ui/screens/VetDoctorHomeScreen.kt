@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,9 +44,12 @@ import androidx.compose.ui.unit.sp
 import com.example.data.model.Appointment
 import com.example.ui.components.CattleAvatar
 import com.example.ui.theme.BlueVet
+import com.example.ui.theme.GreenContainer
 import com.example.ui.theme.GreenDark
 import com.example.ui.theme.GreenPrimary
 import com.example.ui.theme.StatusSick
+import com.example.ui.theme.TextPrimary
+import com.example.ui.theme.TextSecondary
 
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material3.DropdownMenu
@@ -79,7 +84,7 @@ fun VetDoctorHomeScreen(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color(0xFFF9FAF8)
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // Top App Bar matching Screen 7
@@ -89,7 +94,7 @@ fun VetDoctorHomeScreen(
                         text = tr("पशु चिकित्सक होम", "Veterinary Doctor Home", "पशुवैद्यक मुख्यपृष्ठ", "પશુ ચિકિત્સક હોમ", "ਪਸ਼ੂ ਡਾਕਟਰ ਹੋਮ"),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 },
                 navigationIcon = {
@@ -97,7 +102,7 @@ fun VetDoctorHomeScreen(
                         Icon(
                             imageVector = Icons.Default.Menu,
                             contentDescription = "Menu",
-                            tint = Color(0xFF1B241C)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
@@ -105,7 +110,7 @@ fun VetDoctorHomeScreen(
                     Box {
                         Surface(
                             shape = RoundedCornerShape(16.dp),
-                            color = Color(0xFFE8F5E9),
+                            color = GreenContainer,
                             border = androidx.compose.foundation.BorderStroke(1.dp, GreenPrimary.copy(alpha = 0.5f)),
                             modifier = Modifier.clickable { langMenuExpanded = true }
                         ) {
@@ -139,7 +144,7 @@ fun VetDoctorHomeScreen(
                                         Text(
                                             text = lang,
                                             fontWeight = if (lang == selectedLanguage) FontWeight.Bold else FontWeight.Normal,
-                                            color = if (lang == selectedLanguage) GreenDark else Color.Black
+                                            color = if (lang == selectedLanguage) GreenDark else TextPrimary
                                         )
                                     },
                                     onClick = {
@@ -155,18 +160,24 @@ fun VetDoctorHomeScreen(
                         Icon(
                             imageVector = Icons.Default.NotificationsNone,
                             contentDescription = "Notifications",
-                            tint = Color(0xFF1B241C)
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.TopCenter
             ) {
+                val isWide = maxWidth > 680.dp
+                LazyColumn(
+                    modifier = Modifier
+                        .widthIn(max = 720.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = if (isWide) 24.dp else 16.dp, vertical = 12.dp)
+                ) {
                 // Greeting with Doctor Avatar
                 item {
                     Row(
@@ -179,12 +190,12 @@ fun VetDoctorHomeScreen(
                                 text = tr("नमस्ते डॉ. महेश 👋", "Hello Dr. Mahesh 👋", "नमस्कार डॉ. महेश 👋", "નમસ્તે ડૉ. મહેશ 👋", "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਡਾ. ਮਹੇਸ਼ 👋"),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFF1B241C)
+                                color = TextPrimary
                             )
                             Text(
                                 text = tr("पशु चिकित्सालय, भाटी केंद्र • एम.वी.एससी (सर्जरी)", "Veterinary Hospital, Bhati • MVSc (Surgery)", "पशू रुग्णालय, भाटी केंद्र", "પશુ દવાખાનું, ભાટી કેન્દ્ર", "ਪਸ਼ੂ ਹਸਪਤਾਲ, ਭਾਟੀ ਕੇਂਦਰ"),
                                 fontSize = 12.sp,
-                                color = Color(0xFF616161)
+                                color = TextSecondary
                             )
                         }
                         androidx.compose.foundation.Image(
@@ -241,7 +252,7 @@ fun VetDoctorHomeScreen(
                         text = tr("आज के अपॉइंटमेंट", "Today's Appointments", "आजच्या भेटी", "આજના એપોઇન્ટમેન્ટ", "ਅੱਜ ਦੇ ਅਪੌਇੰਟਮੈਂਟ"),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1B241C)
+                        color = TextPrimary
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -274,6 +285,7 @@ fun VetDoctorHomeScreen(
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                 }
+            }
             }
         }
     }
@@ -311,7 +323,7 @@ private fun VetKpiCard(
                 fontSize = 11.sp,
                 lineHeight = 14.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color(0xFF424242)
+                color = TextSecondary
             )
         }
     }
@@ -327,7 +339,7 @@ private fun AppointmentCard(
             .fillMaxWidth()
             .clickable { onClick() },
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
@@ -348,7 +360,7 @@ private fun AppointmentCard(
                     text = appointment.cattleTag,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1B241C)
+                    color = TextPrimary
                 )
 
                 Spacer(modifier = Modifier.height(2.dp))
@@ -356,7 +368,7 @@ private fun AppointmentCard(
                 Text(
                     text = appointment.farmerName,
                     fontSize = 13.sp,
-                    color = Color(0xFF616161)
+                    color = TextSecondary
                 )
             }
 
@@ -364,7 +376,7 @@ private fun AppointmentCard(
                 text = appointment.timeSlot,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color(0xFF333333)
+                color = TextPrimary
             )
         }
     }
